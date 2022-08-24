@@ -1,0 +1,63 @@
+.active-users-list {
+    padding-top: 0;
+    padding-bottom: 0;
+    min-width: 260px;
+}
+.active-users-list ::-webkit-scrollbar {
+  width: 2px;
+  background: #EBEEF0;
+}
+.active-users-list ::-webkit-scrollbar-track {
+  background: #EBEEF0;
+}
+.active-users-list ::-webkit-scrollbar-thumb {
+  background: #C0C6CC;
+  border-radius: 10px;
+  max-height: 30px;
+}
+.active-users-list ::-webkit-scrollbar-thumb:hover {
+  background: #98A1A9;
+}
+.active-users-list-header {
+    padding: 10px;
+    font-size: .90rem;
+    font-weight: bold;
+    background: #dddddd;
+    border-bottom: 1px solid #d6d6d6;
+}
+.active-users-list-footer {
+    padding: 5px;
+    font-size: .70rem;
+    background: #dddddd;
+    border-top: 1px solid #d6d6d6;
+    text-align: center;
+}
+.active-users-list-body {
+    width: 100%;
+    max-height: 260px;
+    overflow-y: auto;
+}
+.active-users-list-item {
+    width: 100%;
+    display: flex;
+    flex-direction : row;
+    align-items: center;
+    padding: 10px 10px;
+    border-bottom: 1px solid #f6f6f6;
+}
+.active-users-list-item::last-child {
+    border-bottom: 0;
+}
+.active-users-item-avatar > img {
+    width: 26px;
+    height: 26px;
+}
+.active-users-item-name {
+    max-width: 230px;
+    flex-grow: 1;
+    margin-left: 10px;
+    font-size: .80rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
