@@ -51,17 +51,17 @@ frappe.ActiveUsers = class {
                 class="nav-item dropdown dropdown-notifications dropdown-mobile hidden active-users-navbar-icon"
                 title="{{ _('Active Users') }}">
                 <a class="nav-link active-users-icon text-muted"
-					data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
-					href="#" onclick="return false;">
-					<span class="fa fa-users fa-md fa-fw"></span>
-				</a>
-				<div class="dropdown-menu active-users-list dropdown-menu-right" role="menu">
-					<div class="active-users-list-header">
-						{{ _('Active Users') }}
-					</div>
-					<div class="active-users-list-body"></div>
-					<div class="active-users-list-footer"></div>
-				</div>
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+                    href="#" onclick="return false;">
+                    <span class="fa fa-users fa-md fa-fw"></span>
+                </a>
+                <div class="dropdown-menu active-users-list dropdown-menu-right" role="menu">
+                    <div class="active-users-list-header">
+                        {{ _('Active Users') }}
+                    </div>
+                    <div class="active-users-list-body"></div>
+                    <div class="active-users-list-footer"></div>
+                </div>
             </li>
         `);
         
