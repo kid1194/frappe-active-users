@@ -48,7 +48,7 @@
 .active-users-list-item::last-child {
     border-bottom: 0;
 }
-.active-users-item-avatar > img {
+.active-users-item-avatar > .avatar {
     width: 26px;
     height: 26px;
 }
