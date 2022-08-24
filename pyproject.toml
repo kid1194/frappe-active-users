@@ -1,0 +1,22 @@
+[project]
+name = "active_users"
+authors = [
+    {name = "Ameen Ahmed (Level Up)", email = "kid1194@gmail.com"}
+]
+description = "Frappe plugin that displays a list of current active users."
+keywords = ["frappe", "users", "active users"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: JavaScript"
+]
+requires-python = ">=3.6"
+readme = "README.md"
+dynamic = ["version"]
+dependencies = [
+    "frappe>=13.0.0"
+]
+
+[project.urls]
+Documentation = "https://github.com/kid1194/frappe-active-users"
+Source = "https://github.com/kid1194/frappe-active-users"
