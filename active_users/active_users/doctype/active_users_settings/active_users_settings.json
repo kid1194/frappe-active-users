@@ -1,0 +1,115 @@
+{
+ "actions": [],
+ "creation": "2022-04-04 04:04:04.119400",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "info_section",
+  "is_enabled",
+  "info_column",
+  "refresh_interval",
+  "visibility_section",
+  "roles_condition",
+  "roles",
+  "users_condition",
+  "users",
+  "visibility_column",
+  "visibility_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "info_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "is_enabled",
+   "fieldtype": "Check",
+   "label": "Is Enabled",
+   "default": "1"
+  },
+  {
+   "fieldname": "info_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "refresh_interval",
+   "fieldtype": "Int",
+   "label": "Refresh Interval (Minutes)",
+   "default": "10"
+  },
+  
+  {
+   "fieldname": "visibility_section",
+   "fieldtype": "Section Break",
+   "label": "Visibility"
+  },
+  {
+   "fieldname": "roles_condition",
+   "fieldtype": "Select",
+   "label": "Roles Condition",
+   "options": "Visible Only For Listed Roles\nHidden Only From Listed Roles",
+   "default": "Visible Only For Listed Roles"
+  },
+  {
+   "fieldname": "roles",
+   "fieldtype": "Table MultiSelect",
+   "label": "Roles",
+   "options": "Active Users Has Role"
+  },
+  {
+   "fieldname": "users_condition",
+   "fieldtype": "Select",
+   "label": "Users Condition",
+   "options": "Visible Only For Listed Users\nHidden Only From Listed Users",
+   "default": "Visible Only For Listed Users"
+  },
+  {
+   "fieldname": "users",
+   "fieldtype": "Table MultiSelect",
+   "label": "Users",
+   "options": "Active Users Has User"
+  },
+  {
+   "fieldname": "visibility_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "visibility_notes",
+   "fieldtype": "HTML",
+   "label": "Notes",
+   "options": "<ol>\n<li>Use <code>Roles Condition</code> to alter the plugin's visibility for the specified roles.</li>\n<li>Use <code>Users Condition</code> to alter the plugin's visibility for the specified users and bypass the roles visibility.</li>\n</ol>",
+   "read_only": 1
+  }
+ ],
+ "icon": "fa fa-cog",
+ "issingle": 1,
+ "links": [],
+ "modified": "2022-04-04 04:04:04.119400",
+ "modified_by": "Administrator",
+ "module": "Active Users",
+ "name": "Active Users Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Administrator",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
