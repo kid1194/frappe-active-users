@@ -4,26 +4,28 @@
 # Licence: Please refer to license.txt
 
 
+from datetime import datetime
+
 import frappe
-from frappe.utils import has_common
+from frappe.utils import has_common, get_datetime_str, get_timedelta, now
 
 
-_CACHE_KEY = 'active_users'
+_CACHE_KEY = "active_users"
 
 
 @frappe.whitelist()
-def get_settings() -> dict:
-    cache_key = 'settings'
+def get_settings():
+    cache_key = "settings"
     cache = frappe.cache().hget(_CACHE_KEY, cache_key)
     
     if isinstance(cache, dict):
         return cache
     
-    result = frappe._dict({
-        'is_enabled': False,
-    })
+    result = {
+        "is_enabled": False,
+    }
     
-    settings = frappe.get_cached_doc('Active Users Settings')
+    settings = frappe.get_cached_doc("Active Users Settings")
     
     if not settings.is_enabled:
         frappe.cache().hset(_CACHE_KEY, cache_key, result)
@@ -53,17 +55,20 @@ def get_settings() -> dict:
         frappe.cache().hset(_CACHE_KEY, cache_key, result)
         return result
     
-    result['is_enabled'] = True
-    result['refresh_interval'] = settings.refresh_interval
+    result["is_enabled"] = True
+    result["refresh_interval"] = settings.refresh_interval
     frappe.cache().hset(_CACHE_KEY, cache_key, result)
     return result
 
 
 @frappe.whitelist()
 def get_users():
-    doc = frappe.qb.DocType('User')
+    session_expiry = frappe.db.get_value("System Settings", fieldname="session_expiry", pluck=True)
+    doc = frappe.qb.DocType("User")
+    start = get_datetime_str(datetime(now()) - get_timedelta(session_expiry))
+    end = now()
     return (
         frappe.db.from_(doc)
         .select(doc.name, doc.full_name, doc.user_image)
-        .where(doc.last_active.lte(frappe.utils.now()))
+        .where(doc.last_active.between(start, end))
     ).run(as_dict=True)
