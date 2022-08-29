@@ -8,12 +8,14 @@
 frappe.provide('frappe.ActiveUsers');
 frappe.provide('frappe._active_users');
 
-frappe.ActiveUsers = class {
+frappe.ActiveUsers = class ActiveUsers {
     constructor() {
         if (frappe.desk == null) {
             frappe.throw(_('Active Users can not be used outside Desk.'));
             return;
         }
+        this.settings = {};
+        this.data = [];
         this.setup_app();
     }
     setup_app() {
@@ -113,4 +115,4 @@ frappe.ActiveUsers.start = function() {
     frappe._active_users = new frappe.ActiveUsers();
 };
         
-$(function() { frappe.ActiveUsers.start(); });
+frappe.ready(function() { frappe.ActiveUsers.start(); });
