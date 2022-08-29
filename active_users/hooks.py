@@ -21,12 +21,12 @@ is_frappe_above_v13 = int(frappe_version.split('.')[0]) > 13
 app_include_css = [
     'active_users.bundle.css'
 ] if is_frappe_above_v13 else [
-    '/assets/active_users/css/active_users.bundle.css'
+    '/assets/active_users/css/active_users.css'
 ]
 app_include_js = [
     'active_users.bundle.js'
 ] if is_frappe_above_v13 else [
-    '/assets/active_users/js/active_users.bundle.js'
+    '/assets/active_users/js/active_users.js'
 ]
 
 # include custom scss in every website theme (without file extension ".scss")
