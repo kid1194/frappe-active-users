@@ -19,8 +19,9 @@ def after_install():
     
     if roles:
         settings = frappe.get_doc("Active Users Settings")
+        settings_roles = [v.role for v in settings.roles if v.role in roles]
+        if not settings_roles:
+            for r in roles:
+                settings.append("roles", {"role": r})
         
-        for r in roles:
-            settings.append("roles", {"role": r})
-        
-        settings.save(ignore_permissions=True)
+            settings.save(ignore_permissions=True)
