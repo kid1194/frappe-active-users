@@ -77,7 +77,7 @@
    "fieldname": "visibility_notes",
    "fieldtype": "HTML",
    "label": "Notes",
-   "options": "<ol>\n<li>Use <code>Roles Condition</code> to alter the plugin's visibility for the specified roles.</li>\n<li>Use <code>Users Condition</code> to alter the plugin's visibility for the specified users and bypass the roles visibility.</li>\n</ol>",
+   "options": "<ol>\n<li>Use <code>Roles Condition</code> to alter the plugin's visibility for the specified roles.</li>\n<li>Use <code>Users Condition</code> to alter the plugin's visibility for the specified users and bypass the roles visibility condition.</li>\n</ol>",
    "read_only": 1
   }
  ],

@@ -7,7 +7,7 @@
 from datetime import datetime
 
 import frappe
-from frappe.utils import has_common, get_datetime_str, get_timedelta, now
+from frappe.utils import cint, has_common, get_datetime_str, get_timedelta, now
 
 
 _CACHE_KEY = "active_users"
@@ -56,7 +56,7 @@ def get_settings():
         return result
     
     result["is_enabled"] = True
-    result["refresh_interval"] = settings.refresh_interval
+    result["refresh_interval"] = cint(settings.refresh_interval)
     frappe.cache().hset(_CACHE_KEY, cache_key, result)
     return result
 

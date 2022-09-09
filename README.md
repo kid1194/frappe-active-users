@@ -1,5 +1,8 @@
 # Frappe Active Users
+
 A small plugin for Frappe that displays a list of current active users.
+
+---
 
 ### Table of Contents
 <ul>
@@ -25,48 +28,110 @@ A small plugin for Frappe that displays a list of current active users.
 
 ### Setup
 
+⚠️ *Important* ⚠️
+
+*Do not forget to replace [sitename] with the name of your site in all commands.*
+
 #### Install
-1. Get the plugin from Github
+1. Go to bench directory
+
+```
+cd ~/frappe-bench
+```
+
+2. Get plugin from Github
 
 *(Required only once)*
 
-`bench get-app https://github.com/kid1194/frappe-active-users`
+```
+bench get-app https://github.com/kid1194/frappe-active-users
+```
 
-2. Install the plugin on any instance/site you want
+3. Build plugin
 
-`bench --site [sitename] install-app active_users`
+*(Required only once)*
 
-3. Check the usage section below
+```
+bench build --apps active_users
+```
+
+4. Install plugin on a specific site
+
+```
+bench --site [sitename] install-app active_users
+```
+
+5. Check the usage section below
 
 #### Update
-1. Go to the app directory (frappe-bench/apps/active_users) and execute:
+1. Go to app directory
 
-`git pull`
+```
+cd ~/frappe-bench/apps/active_users
+```
 
-2. Go back to the frappe-bench directory and execute:
+2. Get updates from Github
 
-`bench --site [sitename] migrate`
+```
+git pull
+```
 
-3. *In case you need to restart bench, execute:*
+3. Go to bench directory
 
-`bench restart`
+```
+cd ~/frappe-bench
+```
+
+4. Build plugin
+
+```
+bench build --apps active_users
+```
+
+5. Update a specific site
+
+```
+bench --site [sitename] migrate
+```
+
+6. Restart bench
+
+```
+bench restart
+```
 
 #### Uninstall
-1. Uninstall the plugin from the instance/site
+1. Go to bench directory
 
-`bench --site [sitename] uninstall-app active_users`
+```
+cd ~/frappe-bench
+```
 
-2. Uninstall the plugin from bench
+2. Uninstall plugin from a specific site
 
-`bench remove-app active_users`
+```
+bench --site [sitename] uninstall-app active_users
+```
+
+3. Remove plugin from bench
+
+```
+bench remove-app active_users
+```
+
+4. Restart bench
+
+```
+bench restart
+```
 
 ---
 
 ### Usage
-1. Go to `Active Users Settings`
-2. Check the `Is Enabled` box and set the desired `Refresh Interval`
-3. Select the `Roles Condition` and add the `Roles` allowed to use the plugin
-4. Optional, select the `Users Condition` and add the `Users` allowed to use the plugin
+1. Go to **Active Users Settings**
+2. Check the **Is Enabled** box and set the desired **Refresh Interval**
+3. Select the **Roles Condition** and add the **Roles** allowed to use the plugin
+4. **Optional**, select the **Users Condition** and add the **Users** allowed to use the plugin
 
 ---
 

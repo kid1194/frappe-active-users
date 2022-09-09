@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "autoname": "field:role",
  "creation": "2022-04-04 04:04:04.119400",
  "doctype": "DocType",
  "editable_grid": 1,

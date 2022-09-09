@@ -11,7 +11,7 @@ frappe.provide('frappe._active_users');
 frappe.ActiveUsers = class ActiveUsers {
     constructor() {
         if (frappe.desk == null) {
-            frappe.throw(_('Active Users can not be used outside Desk.'));
+            frappe.throw(_('Active Users plugin can not be used outside Desk.'))
             return;
         }
         this.settings = {};
@@ -72,8 +72,9 @@ frappe.ActiveUsers = class ActiveUsers {
         this.$footer = $('.active-users-list-footer');
     }
     setup_sync() {
-        var delay = cint(this.settings.refresh_interval) * 60000;
-        frappe.timeout(delay).then(this.sync_data);
+        var me = this,
+        delay = cint(this.settings.refresh_interval) * 60000;
+        frappe.timeout(delay).then(function() { me.sync_data(); });
     }
     sync_data() {
         var me = this;
@@ -115,4 +116,4 @@ frappe.ActiveUsers.start = function() {
     frappe._active_users = new frappe.ActiveUsers();
 };
         
-frappe.ready(function() { frappe.ActiveUsers.start(); });
+$(document).ready(function() { frappe.ActiveUsers.start(); });
