@@ -32,7 +32,7 @@ def get_settings():
         return result
     
     users = [v.user for v in settings.users]
-    visible_for_users = settings.users_condition == "Visible Only For Listed Users"
+    visible_for_users = settings.users_restriction == "Enabled For Restricted Users"
     if (
         (
             visible_for_users and user not in users
@@ -44,7 +44,7 @@ def get_settings():
         return result
     
     roles = [v.role for v in settings.roles]
-    visible_for_roles = settings.roles_condition == "Visible Only For Listed Roles"
+    visible_for_roles = settings.roles_restriction == "Enabled For Restricted Roles"
     if (
         (
             visible_for_roles and not has_common(roles, frappe.get_roles())
@@ -71,4 +71,5 @@ def get_users():
         frappe.db.from_(doc)
         .select(doc.name, doc.full_name, doc.user_image)
         .where(doc.last_active.between(start, end))
+        .orderby(doc.full_name)
     ).run(as_dict=True)

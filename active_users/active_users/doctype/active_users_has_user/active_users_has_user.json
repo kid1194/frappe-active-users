@@ -1,9 +1,8 @@
 {
  "actions": [],
- "autoname": "field:user",
+ "autoname": "hash",
  "creation": "2022-04-04 04:04:04.119400",
  "doctype": "DocType",
- "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "user"
@@ -13,8 +12,7 @@
    "fieldname": "user",
    "fieldtype": "Link",
    "label": "User",
-   "options": "User",
-   "reqd": 1
+   "options": "User"
   }
  ],
  "istable": 1,

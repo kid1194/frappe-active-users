@@ -8,13 +8,13 @@
   "is_enabled",
   "info_column",
   "refresh_interval",
-  "visibility_section",
-  "roles_condition",
+  "restriction_section",
+  "roles_restriction",
   "roles",
-  "users_condition",
+  "users_restriction",
   "users",
-  "visibility_column",
-  "visibility_notes"
+  "restriction_column",
+  "restriction_notes"
  ],
  "fields": [
   {
@@ -35,46 +35,47 @@
    "fieldname": "refresh_interval",
    "fieldtype": "Int",
    "label": "Refresh Interval (Minutes)",
-   "default": "10"
+   "description": "The number of minutes to wait before refreshing the list of active users",
+   "default": "5"
   },
   
   {
-   "fieldname": "visibility_section",
+   "fieldname": "restriction_section",
    "fieldtype": "Section Break",
-   "label": "Visibility"
+   "label": "Restriction"
   },
   {
-   "fieldname": "roles_condition",
+   "fieldname": "roles_restriction",
    "fieldtype": "Select",
-   "label": "Roles Condition",
-   "options": "Visible Only For Listed Roles\nHidden Only From Listed Roles",
-   "default": "Visible Only For Listed Roles"
+   "label": "Roles Restriction",
+   "options": "Enabled For Restricted Roles\nDisabled For Restricted Roles",
+   "default": "Enabled For Restricted Roles"
   },
   {
    "fieldname": "roles",
    "fieldtype": "Table MultiSelect",
-   "label": "Roles",
+   "label": "Restricted Roles",
    "options": "Active Users Has Role"
   },
   {
-   "fieldname": "users_condition",
+   "fieldname": "users_restriction",
    "fieldtype": "Select",
-   "label": "Users Condition",
-   "options": "Visible Only For Listed Users\nHidden Only From Listed Users",
-   "default": "Visible Only For Listed Users"
+   "label": "Users Restriction",
+   "options": "Enabled For Restricted Users\nDisabled For Restricted Users",
+   "default": "Enabled For Restricted Users"
   },
   {
    "fieldname": "users",
    "fieldtype": "Table MultiSelect",
-   "label": "Users",
+   "label": "Restricted Users",
    "options": "Active Users Has User"
   },
   {
-   "fieldname": "visibility_column",
+   "fieldname": "restriction_column",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "visibility_notes",
+   "fieldname": "restriction_notes",
    "fieldtype": "HTML",
    "label": "Notes",
    "options": "<ol>\n<li>Use <code>Roles Condition</code> to alter the plugin's visibility for the specified roles.</li>\n<li>Use <code>Users Condition</code> to alter the plugin's visibility for the specified users and bypass the roles visibility condition.</li>\n</ol>",

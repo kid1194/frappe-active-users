@@ -1,9 +1,8 @@
 {
  "actions": [],
- "autoname": "field:role",
+ "autoname": "hash",
  "creation": "2022-04-04 04:04:04.119400",
  "doctype": "DocType",
- "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "role"
@@ -13,8 +12,7 @@
    "fieldname": "role",
    "fieldtype": "Link",
    "label": "Role",
-   "options": "Role",
-   "reqd": 1
+   "options": "Role"
   }
  ],
  "istable": 1,
