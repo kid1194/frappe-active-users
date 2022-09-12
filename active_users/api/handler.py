@@ -31,13 +31,15 @@ def get_settings():
         frappe.cache().hset(_CACHE_KEY, cache_key, result)
         return result
     
+    user = frappe.session.user
     users = [v.user for v in settings.users]
     visible_for_users = settings.users_restriction == "Enabled For Restricted Users"
+    in_users = user in users
     if (
         (
-            visible_for_users and user not in users
+            visible_for_users and not in_users
         ) or (
-            not visible_for_users and user in users
+            not visible_for_users and in_users
         )
     ):
         frappe.cache().hset(_CACHE_KEY, cache_key, result)
@@ -45,11 +47,12 @@ def get_settings():
     
     roles = [v.role for v in settings.roles]
     visible_for_roles = settings.roles_restriction == "Enabled For Restricted Roles"
+    in_roles = has_common(roles, frappe.get_roles())
     if (
         (
-            visible_for_roles and not has_common(roles, frappe.get_roles())
+            visible_for_roles and not in_roles
         ) or (
-            not visible_for_roles and has_common(roles, frappe.get_roles())
+            not visible_for_roles and in_roles
         )
     ):
         frappe.cache().hset(_CACHE_KEY, cache_key, result)
