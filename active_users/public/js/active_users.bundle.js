@@ -176,7 +176,9 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
 };
 
 frappe.ActiveUsers.start = function() {
-    if (frappe._active_users) frappe._active_users.destory();
+    if (frappe._active_users && frappe._active_users.destory) {
+        frappe._active_users.destory();
+    }
     if (frappe.desk == null) return;
     frappe._active_users = new frappe.ActiveUsers();
 };
