@@ -12,7 +12,7 @@ frappe.provide('frappe.dom');
 frappe.ActiveUsers = class ActiveUsers {
     constructor() {
         if (frappe.desk == null) {
-            frappe.throw(_('Active Users plugin can not be used outside Desk.'))
+            frappe.throw(__('Active Users plugin can not be used outside Desk.'));
             return;
         }
         this.settings = {};
@@ -64,19 +64,16 @@ frappe.ActiveUsers = class ActiveUsers {
         );
     }
     setup_display() {
-        let nav = (`
-            <li
-                class="nav-item dropdown dropdown-notifications dropdown-mobile hidden active-users-navbar-item"
-                title="{{ _('Active Users') }}">
+        let title = __('Active Users'),
+        nav = (`
+            <li class="nav-item dropdown dropdown-notifications dropdown-mobile hidden active-users-navbar-item" title="${title}">
                 <a class="nav-link active-users-navbar-icon text-muted"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-persist="true"
                     href="#" onclick="return false;">
                     <span class="fa fa-users fa-md fa-fw"></span>
                 </a>
                 <div class="dropdown-menu active-users-list dropdown-menu-right" role="menu">
-                    <div class="active-users-list-header">
-                        {{ _('Active Users') }}
-                    </div>
+                    <div class="active-users-list-header">${title}</div>
                     <div class="active-users-list-body">
                         <div class="active-users-list-loading">
                             <div class="active-users-list-loading-box"></div>
@@ -165,7 +162,7 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
             `).appendTo(me.$body.get(0));
             $clamp(item.find('.active-users-item-name').get(0), {clamp: 1});
         });
-        this.$footer.html(_('Total') + ': ' + this.data.length);
+        this.$footer.html(__('Total') + ': ' + this.data.length);
     }
     destory() {
         this.clear_sync();
