@@ -22,7 +22,6 @@ frappe.ActiveUsers = class ActiveUsers {
     request(method, callback, type) {
         var me = this;
         let p = frappe.call({
-            type: 'GET',
             method: 'active_users.api.handler.' + method,
         });
         p.then(function(res) {

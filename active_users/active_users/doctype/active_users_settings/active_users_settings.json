@@ -48,26 +48,26 @@
    "fieldname": "roles_restriction",
    "fieldtype": "Select",
    "label": "Roles Restriction",
-   "options": "Enabled For Restricted Roles\nDisabled For Restricted Roles",
-   "default": "Enabled For Restricted Roles"
+   "options": "Enabled For Listed Roles\nDisabled For Listed Roles",
+   "default": "Enabled For Listed Roles"
   },
   {
    "fieldname": "roles",
    "fieldtype": "Table MultiSelect",
-   "label": "Restricted Roles",
+   "label": "Listed Roles",
    "options": "Active Users Has Role"
   },
   {
    "fieldname": "users_restriction",
    "fieldtype": "Select",
    "label": "Users Restriction",
-   "options": "Enabled For Restricted Users\nDisabled For Restricted Users",
-   "default": "Enabled For Restricted Users"
+   "options": "Enabled For Listed Users\nDisabled For Listed Users",
+   "default": "Enabled For Listed Users"
   },
   {
    "fieldname": "users",
    "fieldtype": "Table MultiSelect",
-   "label": "Restricted Users",
+   "label": "Listed Users",
    "options": "Active Users Has User"
   },
   {

@@ -12,7 +12,9 @@
    "fieldname": "user",
    "fieldtype": "Link",
    "label": "User",
-   "options": "User"
+   "options": "User",
+   "reqd": 1,
+   "in_list_view": 1
   }
  ],
  "istable": 1,

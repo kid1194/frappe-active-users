@@ -5,7 +5,9 @@
 
 import frappe
 from frappe.model.document import Document
+
 from active_users.api.handler import _CACHE_KEY
+
 
 class ActiveUsersSettings(Document):
 	def after_save(self):

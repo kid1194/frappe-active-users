@@ -12,7 +12,9 @@
    "fieldname": "role",
    "fieldtype": "Link",
    "label": "Role",
-   "options": "Role"
+   "options": "Role",
+   "reqd": 1,
+   "in_list_view": 1
   }
  ],
  "istable": 1,
