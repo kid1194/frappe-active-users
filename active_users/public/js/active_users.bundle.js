@@ -40,8 +40,8 @@ frappe.ActiveUsers = class ActiveUsers {
         .then(function() {
             if (!me.settings.is_enabled) return;
             frappe.run_serially([
-                me.setup_display,
-                me.sync_reload,
+                function() { me.setup_display(); },
+                function() { me.sync_reload(); },
             ]);
         });
     }
@@ -126,10 +126,11 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
         }
     }
     sync_reload() {
+        var me = this;
         this.clear_sync();
         frappe.run_serially([
-            this.sync_data,
-            this.setup_sync,
+            function() { me.sync_data(); },
+            function() { me.setup_sync(); },
         ]);
     }
     sync_data() {
