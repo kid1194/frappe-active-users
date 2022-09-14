@@ -7,6 +7,7 @@ import frappe
 
 
 def after_install():
+    frappe.clear_cache()
     roles = frappe.db.get_list(
         "Role",
         fields=["name"],

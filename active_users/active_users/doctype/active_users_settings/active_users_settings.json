@@ -38,7 +38,6 @@
    "description": "The number of minutes to wait before refreshing the list of active users",
    "default": "5"
   },
-  
   {
    "fieldname": "restriction_section",
    "fieldtype": "Section Break",
@@ -78,7 +77,7 @@
    "fieldname": "restriction_notes",
    "fieldtype": "HTML",
    "label": "Notes",
-   "options": "<ol>\n<li>\nUse <code>Roles Condition</code> to alter the plugin visibility for the specified roles.\n</li>\n<li>\nUse <code>Users Condition</code> to alter the plugin visibility for the specified users and bypass the roles visibility condition.\n</li>\n</ol>",
+   "options": "<ol>\n<li>\nUse <code>Roles Condition</code> to set the plugin visibility for the listed roles.\n</li>\n<li>\nUse <code>Users Condition</code> to set the plugin visibility for the listed users and bypass the roles visibility condition for these users.\n</li>\n</ol>",
    "read_only": 1
   }
  ],

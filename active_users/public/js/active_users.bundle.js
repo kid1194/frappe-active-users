@@ -81,15 +81,15 @@ frappe.ActiveUsers = class ActiveUsers {
                     <div class="active-users-list-footer">
                         <div class="active-users-footer-text"></div>
                         <div class="active-users-footer-icon">
-                            <a href="#" class="active-users-footer-reload">
+                            <a href="#" class="active-users-footer-reload text-muted">
                                 <span class="fa fa-sync-alt fa-md fa-fw"></span>
                             </a>
                         </div>
                     </div>
                 </div>
             </li>
-        `);
-        $('header.navbar > .container > .navbar-collapse > ul').prepend(nav);
+        `)
+        .prependTo($('header.navbar > .container > .navbar-collapse > ul.navbar-nav').get(0));
         
         this.$app = nav.find('.active-users-navbar-item');
         this.$body = nav.find('.active-users-list-body');
