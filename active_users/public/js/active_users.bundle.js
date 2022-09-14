@@ -88,8 +88,8 @@ frappe.ActiveUsers = class ActiveUsers {
                     </div>
                 </div>
             </li>
-        `)
-        .prependTo($('header.navbar > .container > .navbar-collapse > ul.navbar-nav').get(0));
+        `);
+        $('header.navbar > .container > .navbar-collapse > ul.navbar-nav').prepend(nav.get(0));
         
         this.$app = nav.find('.active-users-navbar-item');
         this.$body = nav.find('.active-users-list-body');
