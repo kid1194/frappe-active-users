@@ -5,7 +5,7 @@
 
 
 import frappe
-from frappe.utils import cint, has_common, get_datetime_str, get_timedelta, now, now_datetime
+from frappe.utils import cint, has_common, get_datetime_str, get_timedelta, now, now_datetime, add_to_date
 
 
 _CACHE_KEY = "active_users"
@@ -67,11 +67,33 @@ def get_settings():
 @frappe.whitelist()
 def get_users():
     session_expiry = frappe.db.get_value("System Settings", fieldname="session_expiry", pluck=True)
-    if len(session_expiry.split(":")) < 3:
-        session_expiry = session_expiry + ":00"
+    if session_expiry and isinstance(session_expiry, str):
+        session_expiry = session_expiry.split(":")
+        
+        if len(session_expiry) == 2:
+            session_expiry.append("00")
+        
+        for i, v in enumerate(session_expiry):
+            if len(v) == 1:
+                session_expiry[i] = "0" + v
+        
+        session_expiry = ":".join(session_expiry)
+        
+    else:
+        refresh_interval = str(get_settings()["refresh_interval"])
+        if len(refresh_interval) == 1:
+            refresh_interval = "0" + refresh_interval
+        
+        session_expiry = "00:" + refresh_interval + ":00"
     
+    delta = get_timedelta(session_expiry)
+    
+    if delta:
+        start = get_datetime_str(now_datetime() - delta)
+    else:
+        start = add_to_date(minutes=-15, as_string=True, as_datetime=True)
+        
     doc = frappe.qb.DocType("User")
-    start = get_datetime_str(now_datetime() - get_timedelta(session_expiry))
     end = now()
     return (
         frappe.db.from_(doc)
