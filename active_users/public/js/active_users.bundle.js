@@ -64,7 +64,7 @@ frappe.ActiveUsers = class ActiveUsers {
     }
     setup_display() {
         let title = __('Active Users'),
-        nav = (`
+        nav = $(`
             <li class="nav-item dropdown dropdown-notifications dropdown-mobile hidden active-users-navbar-item" title="${title}">
                 <a class="nav-link active-users-navbar-icon text-muted"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-persist="true"
@@ -159,7 +159,8 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
                     <div class="active-users-item-avatar">${avatar}</div>
                     <div class="active-users-item-name">${name}</div>
                 </div>
-            `).appendTo(me.$body.get(0));
+            `);
+            me.$body.append(item.get(0));
             $clamp(item.find('.active-users-item-name').get(0), {clamp: 1});
         });
         this.$footer.html(__('Total') + ': ' + this.data.length);
