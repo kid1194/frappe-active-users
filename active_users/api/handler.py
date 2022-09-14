@@ -88,13 +88,14 @@ def get_users():
     
     delta = get_timedelta(session_expiry)
     
+    end = now()
+    
     if delta:
         start = get_datetime_str(now_datetime() - delta)
     else:
-        start = add_to_date(minutes=-15, as_string=True, as_datetime=True)
+        start = add_to_date(end, minutes=-15, as_string=True, as_datetime=True)
         
     doc = frappe.qb.DocType("User")
-    end = now()
     return (
         frappe.db.from_(doc)
         .select(doc.name, doc.full_name, doc.user_image)
