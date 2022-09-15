@@ -97,7 +97,7 @@ def get_users():
         
     doc = frappe.qb.DocType("User")
     return (
-        frappe.db.from_(doc)
+        frappe.qb.from_(doc)
         .select(doc.name, doc.full_name, doc.user_image)
         .where(doc.enabled == 1)
         .where(doc.user_type != "Website User")
