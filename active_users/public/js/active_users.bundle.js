@@ -142,7 +142,7 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
         this.request(
             'get_users',
             function(res) {
-                this.data = res;
+                this.data = res.users;
                 this.$loading.hide();
                 this.update_list();
             },

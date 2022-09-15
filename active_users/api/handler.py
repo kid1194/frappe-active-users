@@ -96,7 +96,7 @@ def get_users():
         start = add_to_date(end, minutes=-15, as_string=True, as_datetime=True)
         
     doc = frappe.qb.DocType("User")
-    return (
+    data = (
         frappe.qb.from_(doc)
         .select(doc.name, doc.full_name, doc.user_image)
         .where(doc.enabled == 1)
@@ -104,3 +104,5 @@ def get_users():
         .where(doc.last_active.between(start, end))
         .orderby(doc.full_name)
     ).run(as_dict=True)
+    
+    return {"users": data}
