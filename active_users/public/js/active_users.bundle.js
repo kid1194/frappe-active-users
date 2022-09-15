@@ -8,6 +8,7 @@
 frappe.provide('frappe.ActiveUsers');
 frappe.provide('frappe._active_users');
 frappe.provide('frappe.dom');
+frappe.provide('frappe.utils');
 
 frappe.ActiveUsers = class ActiveUsers {
     constructor() {
@@ -56,6 +57,7 @@ frappe.ActiveUsers = class ActiveUsers {
         return this.request(
             'get_settings',
             function(res) {
+                console.log('[Active Users]: Settings received', res);
                 this.settings = res;
                 this.settings.refresh_interval = cint(this.settings.refresh_interval) * 60000;
             },
@@ -63,9 +65,9 @@ frappe.ActiveUsers = class ActiveUsers {
         );
     }
     setup_display() {
-        let title = __('Active Users'),
-        nav = $(`
-            <li class="nav-item dropdown dropdown-notifications dropdown-mobile hidden active-users-navbar-item" title="${title}">
+        let title = __('Active Users');
+        this.$app = $(`
+            <li class="nav-item dropdown dropdown-notifications dropdown-mobile active-users-navbar-item" title="${title}">
                 <a class="nav-link active-users-navbar-icon text-muted"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-persist="true"
                     href="#" onclick="return false;">
@@ -89,12 +91,11 @@ frappe.ActiveUsers = class ActiveUsers {
                 </div>
             </li>
         `);
-        $('header.navbar > .container > .navbar-collapse > ul.navbar-nav').prepend(nav.get(0));
+        $('header.navbar > .container > .navbar-collapse > ul.navbar-nav').prepend(this.$app.get(0));
         
-        this.$app = nav.find('.active-users-navbar-item');
-        this.$body = nav.find('.active-users-list-body');
+        this.$body = this.$app.find('.active-users-list-body');
         this.$loading = this.$body.find('.active-users-list-loading');
-        this.$foot = nav.find('.active-users-list-footer');
+        this.$foot = this.$app.find('.active-users-list-footer');
         this.$footer = this.$foot.find('.active-users-footer-text');
         this.$reload = this.$foot.find('.active-users-footer-reload');
         
@@ -142,7 +143,7 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
         this.request(
             'get_users',
             function(res) {
-                this.data = res.users;
+                this.data = frappe.utils.sort(res.users, 'full_name');
                 this.$loading.hide();
                 this.update_list();
             },
