@@ -1,6 +1,5 @@
 .active-users-list {
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0;
     min-width: 260px;
     max-width: 400px;
     overflow: hidden;
@@ -34,7 +33,7 @@
 }
 .active-users-list-header {
     padding: 10px;
-    font-size: 1rem;
+    font-size: .9rem;
     border-top: 0;
 }
 .active-users-list-footer {
@@ -48,9 +47,11 @@
     flex-grow: 1;
     font-size: .8rem;
 }
-.active-users-footer-icon,
+.active-users-footer-icon {
+    flex-shrink: 1;
+}
 .active-users-footer-icon > a {
-    width: 26px;
+    width: 100%;
     text-align: center;
     text-decoration: none;
 }

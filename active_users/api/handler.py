@@ -34,11 +34,11 @@ def get_settings():
     users = [v.user for v in settings.users]
     is_visible = False
     if users:
-        visible_for_users = settings.users_restriction == "Enabled For Listed Users"
+        hidden_from_users = settings.hidden_from_listed_users
         in_users = user in users
         if (
-            (visible_for_users and not in_users) or
-            (not visible_for_users and in_users)
+            (not hidden_from_users and not in_users) or
+            (hidden_from_users and in_users)
         ):
             frappe.cache().hset(_CACHE_KEY, cache_key, result)
             return result
@@ -48,11 +48,11 @@ def get_settings():
     if not is_visible:
         roles = [v.role for v in settings.roles]
         if roles:
-            visible_for_roles = settings.roles_restriction == "Enabled For Listed Roles"
+            hidden_from_roles = settings.hidden_from_listed_roles
             in_roles = has_common(roles, frappe.get_roles())
             if (
-                (visible_for_roles and not in_roles) or
-                (not visible_for_roles and in_roles)
+                (not hidden_from_roles and not in_roles) or
+                (hidden_from_roles and in_roles)
             ):
                 frappe.cache().hset(_CACHE_KEY, cache_key, result)
                 return result
@@ -66,35 +66,27 @@ def get_settings():
 
 @frappe.whitelist()
 def get_users():
-    session_expiry = frappe.db.get_value("System Settings", fieldname="session_expiry", pluck=True)
+    hours = 0
+    minutes = 20
+    seconds = 0
+    
+    session_expiry = frappe.db.get_value("System Settings", None, "session_expiry")
+    
+    if not session_expiry or not isinstance(session_expiry, str):
+        session_expiry = frappe.db.get_value("System Settings", None, "session_expiry_mobile")
+    
     if session_expiry and isinstance(session_expiry, str):
         session_expiry = session_expiry.split(":")
-        
-        if len(session_expiry) == 2:
-            session_expiry.append("00")
-        
-        for i, v in enumerate(session_expiry):
-            if len(v) == 1:
-                session_expiry[i] = "0" + v
-        
-        session_expiry = ":".join(session_expiry)
-        
-    else:
-        refresh_interval = str(get_settings()["refresh_interval"])
-        if len(refresh_interval) == 1:
-            refresh_interval = "0" + refresh_interval
-        
-        session_expiry = "00:" + refresh_interval + ":00"
-    
-    delta = get_timedelta(session_expiry)
+        expiry_len = len(session_expiry)
+        if expiry_len > 0:
+            hours = cint(session_expiry[0])
+        if expiry_len > 1:
+            minutes = cint(session_expiry[1])
+        if expiry_len > 2:
+            seconds = cint(session_expiry[2])
     
     end = now()
-    
-    if delta:
-        start = get_datetime_str(now_datetime() - delta)
-    else:
-        start = add_to_date(end, minutes=-15, as_string=True, as_datetime=True)
-        
+    start = add_to_date(end, hours=-abs(hours), minutes=-abs(minutes), seconds=-abs(seconds), as_string=True, as_datetime=True)
     doc = frappe.qb.DocType("User")
     data = (
         frappe.qb.from_(doc)

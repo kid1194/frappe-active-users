@@ -71,7 +71,7 @@ frappe.ActiveUsers = class ActiveUsers {
                 <a class="nav-link active-users-navbar-icon text-muted"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-persist="true"
                     href="#" onclick="return false;">
-                    <span class="fa fa-users fa-md fa-fw"></span>
+                    <span class="fa fa-user fa-fw"></span>
                 </a>
                 <div class="dropdown-menu active-users-list dropdown-menu-right" role="menu">
                     <div class="active-users-list-header">${title}</div>

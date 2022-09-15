@@ -8,13 +8,13 @@
   "is_enabled",
   "info_column",
   "refresh_interval",
-  "restriction_section",
-  "roles_restriction",
+  "visibility_section",
+  "hidden_from_listed_roles",
   "roles",
-  "users_restriction",
+  "hidden_from_listed_users",
   "users",
-  "restriction_column",
-  "restriction_notes"
+  "visibility_column",
+  "visibility_note"
  ],
  "fields": [
   {
@@ -39,45 +39,41 @@
    "default": "5"
   },
   {
-   "fieldname": "restriction_section",
+   "fieldname": "visibility_section",
    "fieldtype": "Section Break",
-   "label": "Restriction"
+   "label": "Visibility"
   },
   {
-   "fieldname": "roles_restriction",
-   "fieldtype": "Select",
-   "label": "Roles Restriction",
-   "options": "Enabled For Listed Roles\nDisabled For Listed Roles",
-   "default": "Enabled For Listed Roles"
+   "fieldname": "hidden_from_listed_roles",
+   "fieldtype": "Check",
+   "label": "Hidden From Listed Roles"
   },
   {
    "fieldname": "roles",
    "fieldtype": "Table MultiSelect",
-   "label": "Listed Roles",
+   "label": "Roles",
    "options": "Active Users Has Role"
   },
   {
-   "fieldname": "users_restriction",
-   "fieldtype": "Select",
-   "label": "Users Restriction",
-   "options": "Enabled For Listed Users\nDisabled For Listed Users",
-   "default": "Enabled For Listed Users"
+   "fieldname": "hidden_from_listed_users",
+   "fieldtype": "Check",
+   "label": "Hidden From Listed Users"
   },
   {
    "fieldname": "users",
    "fieldtype": "Table MultiSelect",
-   "label": "Listed Users",
+   "label": "Users",
    "options": "Active Users Has User"
   },
   {
-   "fieldname": "restriction_column",
+   "fieldname": "visibility_column",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "restriction_notes",
+   "fieldname": "visibility_note",
    "fieldtype": "HTML",
-   "label": "Notes",
-   "options": "<ol>\n<li>\nUse <code>Roles Condition</code> to set the plugin visibility for the listed roles.\n</li>\n<li>\nUse <code>Users Condition</code> to set the plugin visibility for the listed users and bypass the roles visibility condition for these users.\n</li>\n</ol>",
+   "label": "",
+   "options": "The visibility of the <code>Active Users</code> will be decided as follows:\n<ol>\n<li>If the logged-in user is listed in the <code>Users</code> field then the value of <code>Hidden From Listed Users</code> will decide the visibility of the plugin.</li>\n<li>Else, If the logged-in user has any of the listed <code>Roles</code> field then the value of <code>Hidden From Listed Roles</code> will decide the visibility of the popup.</li>\n</ol>",
    "read_only": 1
   }
  ],
