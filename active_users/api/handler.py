@@ -34,7 +34,7 @@ def get_settings():
     users = [v.user for v in settings.users]
     is_visible = False
     if users:
-        hidden_from_users = settings.hidden_from_listed_users
+        hidden_from_users = cint(settings.hidden_from_listed_users)
         in_users = user in users
         if (
             (not hidden_from_users and not in_users) or
@@ -48,7 +48,7 @@ def get_settings():
     if not is_visible:
         roles = [v.role for v in settings.roles]
         if roles:
-            hidden_from_roles = settings.hidden_from_listed_roles
+            hidden_from_roles = cint(settings.hidden_from_listed_roles)
             in_roles = has_common(roles, frappe.get_roles())
             if (
                 (not hidden_from_roles and not in_roles) or
