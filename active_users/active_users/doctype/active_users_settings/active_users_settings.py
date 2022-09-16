@@ -6,9 +6,9 @@
 import frappe
 from frappe.model.document import Document
 
-from active_users.api.handler import _CACHE_KEY
+from active_users.api.handler import _SETTINGS_CACHE_KEY
 
 
 class ActiveUsersSettings(Document):
 	def after_save(self):
-	    frappe.cache().hdel(_CACHE_KEY, 'settings')
+	    frappe.cache().hdel(_SETTINGS_CACHE_KEY, frappe.session.user)

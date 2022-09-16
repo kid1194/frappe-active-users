@@ -1,4 +1,6 @@
 .active-users-list {
+    left: auto;
+    right: 0;
     padding: 0;
     min-width: 260px;
     max-width: 400px;
@@ -19,6 +21,10 @@
 .active-users-list::-webkit-scrollbar-thumb:hover {
   background: #98A1A9;
 }
+html[dir="rtl"] .active-users-list {
+    left: 0;
+    right: auto;
+}
 .active-users-list-header,
 .active-users-list-footer {
     background: #dddddd;
@@ -36,25 +42,37 @@
     font-size: .9rem;
     border-top: 0;
 }
+html[dir="rtl"] .active-users-list-header {
+    text-align: right;
+}
 .active-users-list-footer {
     display: flex;
     flex-direction : row;
     align-items: center;
     padding: 5px;
+    min-width: 260px;
+    max-width: 400px;
     border-bottom: 0;
 }
 .active-users-footer-text {
-    flex-grow: 1;
+    flex-grow: 23;
     font-size: .8rem;
 }
+html[dir="rtl"] .active-users-footer-text {
+    text-align: right;
+}
 .active-users-footer-icon {
-    flex-shrink: 1;
+    flex-grow: 1;
 }
 .active-users-footer-icon > a {
-    width: 100%;
-    text-align: center;
+    display: block;
+    text-align: right;
     text-decoration: none;
 }
+html[dir="rtl"] .active-users-footer-icon > a {
+    text-align: left;
+}
+
 .active-users-footer-icon > a::hover {
     text-decoration: none;
     color: #000;
@@ -181,7 +199,6 @@
 	}
 }
 .active-users-list-item {
-    width: 100%;
     display: flex;
     flex-direction : row;
     align-items: center;
@@ -191,12 +208,20 @@
 .active-users-list-item::last-child {
     border-bottom: 0;
 }
+.active-users-item-avatar {
+    flex-grow: 2;
+    text-align: center;
+}
 .active-users-item-avatar > .avatar {
     width: 26px;
     height: 26px;
 }
 .active-users-item-name {
-    flex-grow: 1;
+    flex-grow: 22;
     margin-left: 10px;
     font-size: .8rem;
+    text-align: left;
+}
+html[dir="rtl"] .active-users-item-name {
+    text-align: right;
 }

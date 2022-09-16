@@ -73,7 +73,7 @@ frappe.ActiveUsers = class ActiveUsers {
                     href="#" onclick="return false;">
                     <span class="fa fa-user fa-lg fa-fw"></span>
                 </a>
-                <div class="dropdown-menu active-users-list dropdown-menu-right" role="menu">
+                <div class="dropdown-menu active-users-list" role="menu">
                     <div class="active-users-list-header">${title}</div>
                     <div class="active-users-list-body">
                         <div class="active-users-list-loading">
@@ -84,7 +84,7 @@ frappe.ActiveUsers = class ActiveUsers {
                         <div class="active-users-footer-text"></div>
                         <div class="active-users-footer-icon">
                             <a href="#" class="active-users-footer-reload text-muted">
-                                <span class="fa fa-sync-alt fa-md fa-fw"></span>
+                                <span class="fa fa-sync-alt fa-fw"></span>
                             </a>
                         </div>
                     </div>
