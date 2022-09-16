@@ -21,66 +21,36 @@ def on_logout():
 
 @frappe.whitelist()
 def get_settings():
-    frappe.utils.logger.set_log_level("DEBUG")
-    logger = frappe.logger("active-users", file_count=50)
-    
     user = frappe.session.user
     cache = frappe.cache().hget(_SETTINGS_CACHE_KEY, user)
-    
     if isinstance(cache, dict) and "refresh_interval" in cache:
-        logger.debug({"message": "Returning cached settings", "user": user, "data": cache})
         return cache
     
     result = {
         "is_enabled": False,
         "refresh_interval": 5
     }
-    
+    status = 0
     settings = frappe.get_doc("Active Users Settings")
-    logger.debug({"message": "Plugin Settings", "data": settings.as_dict()})
     
     if not settings.is_enabled:
-        logger.debug({"message": "Plugin not enabled", "user": user, "data": result})
-        frappe.cache().hset(_SETTINGS_CACHE_KEY, user, result)
-        return result
+        status = 2
     
-    users = [v.user for v in settings.users]
-    logger.debug({"message": "Listed Users", "user": user, "data": users})
+    if not status and settings.users:
+        users = [v.user for v in settings.users]
+        if users and user in users:
+            status = 2 if settings.hidden_from_listed_users else 1
     
-    if users:
-        hidden_from_users = settings.hidden_from_listed_users == 1
-        in_users = user in users
-        logger.debug({"message": "Checking users visibility", "listed_users": users, "to_be_hidden": hidden_from_users, "data": result})
-        
-        if (
-            (not hidden_from_users and not in_users) or
-            (hidden_from_users and in_users)
-        ):
-            logger.debug({"message": "Hidden from user", "user": user, "data": result})
-            frappe.cache().hset(_SETTINGS_CACHE_KEY, user, result)
-            return result
-    
-    if not users:
+    if not status and settings.roles:
         roles = [v.role for v in settings.roles]
-        logger.debug({"message": "Listed Roles", "roles": frappe.get_roles(), "data": roles})
-        
-        if roles:
-            hidden_from_roles = settings.hidden_from_listed_roles == 1
-            in_roles = has_common(roles, frappe.get_roles())
-            logger.debug({"message": "Checking roles visibility", "listed_roles": roles, "to_be_hidden": hidden_from_roles, "data": result})
+        if roles and has_common(roles, frappe.get_roles()):
+            status = 2 if settings.hidden_from_listed_roles else 1
             
-            if (
-                (not hidden_from_roles and not in_roles) or
-                (hidden_from_roles and in_roles)
-            ):
-                logger.debug({"message": "Hidden from roles", "roles": frappe.get_roles(), "data": result})
-                frappe.cache().hset(_SETTINGS_CACHE_KEY, user, result)
-                return result
+    if status == 1:
+        result["is_enabled"] = True
+        result["refresh_interval"] = cint(settings.refresh_interval)
     
-    result["is_enabled"] = True
-    result["refresh_interval"] = cint(settings.refresh_interval)
     frappe.cache().hset(_SETTINGS_CACHE_KEY, user, result)
-    logger.debug({"message": "Plugin is enabled and visible", "user": user, "data": result})
     return result
 
 

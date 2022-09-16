@@ -37,13 +37,14 @@ html[dir="rtl"] .active-users-list {
     font-weight: 300;
     line-height: 1.2;
 }
+html[dir="rtl"] .active-users-list-header,
+html[dir="rtl"] .active-users-footer-text {
+    text-align: right;
+}
 .active-users-list-header {
     padding: 10px;
     font-size: .9rem;
     border-top: 0;
-}
-html[dir="rtl"] .active-users-list-header {
-    text-align: right;
 }
 .active-users-list-footer {
     display: flex;
@@ -58,21 +59,19 @@ html[dir="rtl"] .active-users-list-header {
     flex-grow: 23;
     font-size: .8rem;
 }
-html[dir="rtl"] .active-users-footer-text {
-    text-align: right;
-}
 .active-users-footer-icon {
     flex-grow: 1;
+    width: 30px;
 }
 .active-users-footer-icon > a {
     display: block;
+    width: 30px;
     text-align: right;
     text-decoration: none;
 }
 html[dir="rtl"] .active-users-footer-icon > a {
     text-align: left;
 }
-
 .active-users-footer-icon > a::hover {
     text-decoration: none;
     color: #000;

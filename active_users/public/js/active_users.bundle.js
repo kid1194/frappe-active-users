@@ -57,7 +57,6 @@ frappe.ActiveUsers = class ActiveUsers {
         return this.request(
             'get_settings',
             function(res) {
-                console.log('[Active Users]: Settings received', res);
                 this.settings = res;
                 this.settings.refresh_interval = cint(this.settings.refresh_interval) * 60000;
             },
