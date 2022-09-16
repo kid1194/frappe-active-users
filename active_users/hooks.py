@@ -69,6 +69,10 @@ app_include_js = ['active_users.bundle.js'] if is_frappe_above_v13 else ['/asset
 # before_install = "active_users.install.before_install"
 after_install = "active_users.setup.install.after_install"
 
+# login
+on_login = ["active_users.api.handler.on_login"]
+on_logout = ["active_users.api.handler.on_logout"]
+
 # Desk Notifications
 # ------------------
 # See frappe.core.notifications.get_notification_config
