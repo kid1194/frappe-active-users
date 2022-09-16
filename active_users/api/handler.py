@@ -39,7 +39,7 @@ def get_settings():
     if users:
         hidden_from_users = settings.hidden_from_listed_users == 1
         in_users = user in users
-        logger.debug({"message": "Checking users visibility", "listed_users": users, "to_be_hidden", hidden_from_users, "data": result})
+        logger.debug({"message": "Checking users visibility", "listed_users": users, "to_be_hidden": hidden_from_users, "data": result})
         
         if (
             (not hidden_from_users and not in_users) or
@@ -54,7 +54,7 @@ def get_settings():
         if roles:
             hidden_from_roles = settings.hidden_from_listed_roles == 1
             in_roles = has_common(roles, frappe.get_roles())
-            logger.debug({"message": "Checking roles visibility", "listed_roles": roles, "to_be_hidden", hidden_from_roles, "data": result})
+            logger.debug({"message": "Checking roles visibility", "listed_roles": roles, "to_be_hidden": hidden_from_roles, "data": result})
             
             if (
                 (not hidden_from_roles and not in_roles) or
