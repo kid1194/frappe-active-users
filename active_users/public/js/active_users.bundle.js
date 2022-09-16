@@ -73,18 +73,28 @@ frappe.ActiveUsers = class ActiveUsers {
                     <span class="fa fa-user fa-lg fa-fw"></span>
                 </a>
                 <div class="dropdown-menu active-users-list" role="menu">
-                    <div class="active-users-list-header">${title}</div>
-                    <div class="active-users-list-body">
-                        <div class="active-users-list-loading">
-                            <div class="active-users-list-loading-box"></div>
+                    <div class="fluid-container">
+        		        <div class="row">
+                            <div class="col active-users-list-header">${title}</div>
                         </div>
                     </div>
-                    <div class="active-users-list-footer">
-                        <div class="active-users-footer-text"></div>
-                        <div class="active-users-footer-icon">
-                            <a href="#" class="active-users-footer-reload text-muted">
-                                <span class="fa fa-sync-alt fa-fw"></span>
-                            </a>
+                    <div class="row">
+                        <div class="col active-users-list-body">
+                            <div class="active-users-list-loading">
+                                <div class="active-users-list-loading-box"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col active-users-list-footer">
+                            <div class="row">
+                                <div class="col active-users-footer-text"></div>
+                                <div class="col-auto active-users-footer-icon">
+                                    <a href="#" class="active-users-footer-reload text-muted">
+                                        <span class="fa fa-sync-alt fa-fw"></span>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -94,9 +104,8 @@ frappe.ActiveUsers = class ActiveUsers {
         
         this.$body = this.$app.find('.active-users-list-body');
         this.$loading = this.$body.find('.active-users-list-loading');
-        this.$foot = this.$app.find('.active-users-list-footer');
-        this.$footer = this.$foot.find('.active-users-footer-text');
-        this.$reload = this.$foot.find('.active-users-footer-reload');
+        this.$footer = this.$app.find('.active-users-footer-text');
+        this.$reload = this.$app.find('.active-users-footer-reload');
         
         var me = this;
         this.$reload.on('click', function(e) {
@@ -155,9 +164,9 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
             let avatar = frappe.get_avatar(null, v.full_name, v.user_image),
             name = v.full_name,
             item = $(`
-                <div class="active-users-list-item">
-                    <div class="active-users-item-avatar">${avatar}</div>
-                    <div class="active-users-item-name">${name}</div>
+                <div class="row active-users-list-item">
+                    <div class="col-auto active-users-item-avatar">${avatar}</div>
+                    <div class="col active-users-item-name">${name}</div>
                 </div>
             `);
             me.$body.append(item.get(0));
@@ -169,7 +178,7 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
         this.clear_sync();
         this.$reload.off('click');
         this.$app.remove();
-        this.data = this.$app = this.$body = this.$loading = this.$foot = this.$footer = this.$reload = null;
+        this.data = this.$app = this.$body = this.$loading = this.$footer = this.$reload = null;
     }
 };
 

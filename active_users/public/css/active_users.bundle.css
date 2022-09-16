@@ -2,9 +2,12 @@
     left: auto;
     right: 0;
     padding: 0;
-    min-width: 260px;
-    max-width: 400px;
+    width: 260px;
     overflow: hidden;
+}
+html[dir="rtl"] .active-users-list {
+    left: 0;
+    right: auto;
 }
 .active-users-list::-webkit-scrollbar {
   width: 2px;
@@ -21,52 +24,34 @@
 .active-users-list::-webkit-scrollbar-thumb:hover {
   background: #98A1A9;
 }
-html[dir="rtl"] .active-users-list {
-    left: 0;
-    right: auto;
-}
 .active-users-list-header,
 .active-users-list-footer {
     background: #dddddd;
-    border: inherit;
-    border-left: 0;
-    border-right: 0;
 }
 .active-users-list-header,
 .active-users-footer-text {
     font-weight: 300;
     line-height: 1.2;
 }
+.active-users-list-header {
+    padding: 10px 25px;
+    font-size: .9rem;
+}
 html[dir="rtl"] .active-users-list-header,
 html[dir="rtl"] .active-users-footer-text {
     text-align: right;
 }
-.active-users-list-header {
-    padding: 10px;
-    font-size: .9rem;
-    border-top: 0;
-}
 .active-users-list-footer {
-    display: flex;
-    flex-direction : row;
+    padding: 5px 25px;
+}
+.active-users-list-footer > div {
+    height: 100%;
     align-items: center;
-    padding: 5px;
-    min-width: 260px;
-    max-width: 400px;
-    border-bottom: 0;
 }
 .active-users-footer-text {
-    flex-grow: 23;
     font-size: .8rem;
 }
-.active-users-footer-icon {
-    flex-grow: 1;
-    width: 30px;
-}
 .active-users-footer-icon > a {
-    display: block;
-    width: 30px;
-    text-align: right;
     text-decoration: none;
 }
 html[dir="rtl"] .active-users-footer-icon > a {
@@ -77,7 +62,6 @@ html[dir="rtl"] .active-users-footer-icon > a {
     color: #000;
 }
 .active-users-list-body {
-    width: 100%;
     max-height: 260px;
     overflow-y: auto;
 }
@@ -198,29 +182,26 @@ html[dir="rtl"] .active-users-footer-icon > a {
 	}
 }
 .active-users-list-item {
-    display: flex;
-    flex-direction : row;
     align-items: center;
-    padding: 10px 10px;
+    padding: 5px 10px;
     border-bottom: 1px solid #f6f6f6;
 }
 .active-users-list-item::last-child {
     border-bottom: 0;
 }
 .active-users-item-avatar {
-    flex-grow: 2;
-    text-align: center;
+    padding: 0 15px;
 }
 .active-users-item-avatar > .avatar {
-    width: 26px;
-    height: 26px;
+    width: 30px;
+    height: auto;
 }
 .active-users-item-name {
-    flex-grow: 22;
-    margin-left: 10px;
     font-size: .8rem;
     text-align: left;
+    padding-left: 0;
 }
 html[dir="rtl"] .active-users-item-name {
     text-align: right;
+    padding-right: 0;
 }
