@@ -6,6 +6,7 @@
 
 import frappe
 from frappe.utils import cint, has_common, get_datetime_str, get_timedelta, now, now_datetime, add_to_date
+from frappe.utils.logger import set_log_level
 
 
 _SETTINGS_CACHE_KEY = "active_users_settings"
@@ -56,7 +57,7 @@ def get_settings():
 
 @frappe.whitelist()
 def get_users():
-    frappe.utils.logger.set_log_level("DEBUG")
+    set_log_level("DEBUG")
     logger = frappe.logger("active-users", file_count=50)
     
     tp = [0, -20, 0]
