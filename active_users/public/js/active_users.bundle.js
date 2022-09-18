@@ -8,7 +8,6 @@
 frappe.provide('frappe.ActiveUsers');
 frappe.provide('frappe._active_users');
 frappe.provide('frappe.dom');
-frappe.provide('frappe.utils');
 
 frappe.ActiveUsers = class ActiveUsers {
     constructor() {
@@ -24,6 +23,8 @@ frappe.ActiveUsers = class ActiveUsers {
         var me = this;
         let p = frappe.call({
             method: 'active_users.api.handler.' + method,
+            'async': true,
+            freeze: false,
         });
         p.then(function(res) {
             if (res && $.isPlainObject(res)) res = res.message || res;
@@ -91,7 +92,7 @@ frappe.ActiveUsers = class ActiveUsers {
                                 <div class="col active-users-footer-text"></div>
                                 <div class="col-auto active-users-footer-icon">
                                     <a href="#" class="active-users-footer-reload text-muted">
-                                        <span class="fa fa-sync-alt fa-fw"></span>
+                                        <span class="fa fa-sync fa-fw"></span>
                                     </a>
                                 </div>
                             </div>
@@ -110,7 +111,7 @@ frappe.ActiveUsers = class ActiveUsers {
         var me = this;
         this.$reload.on('click', function(e) {
             e.preventDefault();
-            me.sync_reload();
+            if (!me._syncing) me.sync_reload();
         });
         
         frappe.dom.eval(`
@@ -123,7 +124,6 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
     }
     setup_sync() {
         var me = this;
-        this.clear_sync();
         this.sync_timer = window.setInterval(function() {
             me.sync_data();
         }, this.settings.refresh_interval);
@@ -148,12 +148,14 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
             this.$body.empty();
             this.$loading.show();
         }
+        this._syncing = true;
         this.request(
             'get_users',
             function(res) {
-                this.data = frappe.utils.sort(res.users, 'full_name');
+                this.data = res.users;
                 this.$loading.hide();
                 this.update_list();
+                this._syncing = null;
             },
             'users list'
         );

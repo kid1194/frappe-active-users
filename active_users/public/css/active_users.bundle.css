@@ -35,6 +35,7 @@ html[dir="rtl"] .active-users-list {
 }
 .active-users-list-header {
     padding: 10px 25px;
+    height: 40px;
     font-size: .9rem;
 }
 html[dir="rtl"] .active-users-list-header,
@@ -45,13 +46,14 @@ html[dir="rtl"] .active-users-footer-text {
     padding: 5px 25px;
 }
 .active-users-list-footer > div {
-    height: 100%;
     align-items: center;
+    height: 30px;
 }
 .active-users-footer-text {
     font-size: .8rem;
 }
 .active-users-footer-icon > a {
+    text-align: right;
     text-decoration: none;
 }
 html[dir="rtl"] .active-users-footer-icon > a {
@@ -194,14 +196,14 @@ html[dir="rtl"] .active-users-footer-icon > a {
 }
 .active-users-item-avatar > .avatar {
     width: 30px;
-    height: auto;
+    height: 30px;
 }
 .active-users-item-name {
+    padding-left: 0;
     font-size: .8rem;
     text-align: left;
-    padding-left: 0;
 }
 html[dir="rtl"] .active-users-item-name {
-    text-align: right;
     padding-right: 0;
+    text-align: right;
 }

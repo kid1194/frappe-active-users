@@ -130,8 +130,7 @@ bench restart
 ### Usage
 1. Go to **Active Users Settings**
 2. Check the **Is Enabled** box and set the desired **Refresh Interval**
-3. Select the **Roles Condition** and add the **Roles** allowed to use the plugin
-4. **Optional**, select the **Users Condition** and add the **Users** allowed to use the plugin
+3. Choose the **Roles** and **Users** that you want the plugin to be visible to or hidden from
 
 ---
 
