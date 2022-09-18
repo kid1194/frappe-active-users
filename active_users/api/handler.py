@@ -59,30 +59,26 @@ def get_users():
     frappe.utils.logger.set_log_level("DEBUG")
     logger = frappe.logger("active-users", file_count=50)
     
-    hours = 0
-    minutes = 20
-    seconds = 0
+    tp = [0, -20, 0]
     
-    session_expiry = frappe.db.get_value("System Settings", None, "session_expiry")
-    logger.debug({"message": "Getting session expiry from system settings", "data": session_expiry})
+    sess_expiry = frappe.db.get_value("System Settings", None, "session_expiry")
+    logger.debug({"message": "Getting session expiry from system settings", "data": sess_expiry})
     
-    if not session_expiry or not isinstance(session_expiry, str):
-        session_expiry = frappe.db.get_value("System Settings", None, "session_expiry_mobile")
-        logger.debug({"message": "Getting mobile session expiry from system settings", "data": session_expiry})
+    if not sess_expiry or not isinstance(sess_expiry, str):
+        sess_expiry = frappe.db.get_value("System Settings", None, "session_expiry_mobile")
+        logger.debug({"message": "Getting mobile session expiry from system settings", "data": sess_expiry})
     
-    if session_expiry and isinstance(session_expiry, str):
-        session_expiry = session_expiry.split(":")
-        expiry_len = len(session_expiry)
-        if expiry_len > 0:
-            hours = cint(session_expiry[0])
-        if expiry_len > 1:
-            minutes = cint(session_expiry[1])
-        if expiry_len > 2:
-            seconds = cint(session_expiry[2])
-        logger.debug({"message": "Parsing session expiry", "data": [hours, minutes, seconds]})
+    if sess_expiry and isinstance(sess_expiry, str):
+        sess_expiry = sess_expiry.split(":")
+        for i in range(len(sess_expiry)):
+            tp[i] = cint(sess_expiry[i])
+            if tp[i]:
+                tp[i] = -abs(tp[i])
+        
+        logger.debug({"message": "Parsing session expiry", "data": tp})
     
     end = now()
-    start = add_to_date(end, hours=-abs(hours), minutes=-abs(minutes), seconds=-abs(seconds), as_string=True, as_datetime=True)
+    start = add_to_date(end, hours=tp[0], minutes=tp[1], seconds=tp[2], as_string=True, as_datetime=True)
     logger.debug({"message": "Users last active time span", "data": {"start": start, "end": end}})
     
     doc = frappe.qb.DocType("User")
