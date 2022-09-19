@@ -143,12 +143,12 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
         ]);
     }
     sync_data() {
+        this._syncing = true;
         if (this.data.length) {
             this.$footer.html('');
             this.$body.empty();
-            this.$loading.show();
         }
-        this._syncing = true;
+        this.$loading.show();
         this.request(
             'get_users',
             function(res) {
