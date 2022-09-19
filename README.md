@@ -2,6 +2,10 @@
 
 A small plugin for Frappe that displays a list of current active users.
 
+<div style="width:100%;text-align:center">
+    <img src="https://github.com/kid1194/frappe-active-users/blob/main/images/image.png?raw=true" alt="Active ausers"/>
+</div>
+
 ---
 
 ### Table of Contents
@@ -16,6 +20,7 @@ A small plugin for Frappe that displays a list of current active users.
         </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#contributors">Contributors</a></li>
     <li><a href="#license">License</a></li>
 </ul>
 
@@ -131,6 +136,11 @@ bench restart
 1. Go to **Active Users Settings**
 2. Check the **Is Enabled** box and set the desired **Refresh Interval**
 3. Choose the **Roles** and **Users** that you want the plugin to be visible to or hidden from
+
+---
+
+### Contributors
+- [Monolith Online](https://github.com/monolithon) (Testing & Debugging)
 
 ---
 
