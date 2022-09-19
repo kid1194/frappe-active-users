@@ -91,8 +91,8 @@ frappe.ActiveUsers = class ActiveUsers {
                             <div class="row">
                                 <div class="col active-users-footer-text"></div>
                                 <div class="col-auto active-users-footer-icon">
-                                    <a href="#" class="active-users-footer-reload text-muted">
-                                        <span class="fa fa-sync fa-fw"></span>
+                                    <a href="#" class="active-users-footer-reload">
+                                        <span class="fa fa-sync"></span>
                                     </a>
                                 </div>
                             </div>

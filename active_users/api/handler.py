@@ -6,7 +6,6 @@
 
 import frappe
 from frappe.utils import cint, has_common, get_datetime_str, get_timedelta, now, now_datetime, add_to_date
-from frappe.utils.logger import set_log_level
 
 
 _SETTINGS_CACHE_KEY = "active_users_settings"
@@ -57,17 +56,11 @@ def get_settings():
 
 @frappe.whitelist()
 def get_users():
-    set_log_level("DEBUG")
-    logger = frappe.logger("active-users", file_count=50)
-    
     tp = [0, -20, 0]
-    
     sess_expiry = frappe.db.get_value("System Settings", None, "session_expiry")
-    logger.debug({"message": "Getting session expiry from system settings", "data": sess_expiry})
     
     if not sess_expiry or not isinstance(sess_expiry, str):
         sess_expiry = frappe.db.get_value("System Settings", None, "session_expiry_mobile")
-        logger.debug({"message": "Getting mobile session expiry from system settings", "data": sess_expiry})
     
     if sess_expiry and isinstance(sess_expiry, str):
         sess_expiry = sess_expiry.split(":")
@@ -75,12 +68,9 @@ def get_users():
             tp[i] = cint(sess_expiry[i])
             if tp[i]:
                 tp[i] = -abs(tp[i])
-        
-        logger.debug({"message": "Parsing session expiry", "data": tp})
     
     end = now()
     start = add_to_date(end, hours=tp[0], minutes=tp[1], seconds=tp[2], as_string=True, as_datetime=True)
-    logger.debug({"message": "Users last active time span", "data": {"start": start, "end": end}})
     
     doc = frappe.qb.DocType("User")
     data = (

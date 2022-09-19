@@ -52,14 +52,19 @@ html[dir="rtl"] .active-users-footer-text {
 .active-users-footer-text {
     font-size: .8rem;
 }
-.active-users-footer-icon > a {
+.active-users-footer-icon {
+    width: 50px;
+}
+.active-users-footer-reload {
+    display: block;
     text-align: right;
+    color: #888;
     text-decoration: none;
 }
-html[dir="rtl"] .active-users-footer-icon > a {
+html[dir="rtl"] .active-users-footer-reload {
     text-align: left;
 }
-.active-users-footer-icon > a::hover {
+.active-users-footer-reload::hover {
     text-decoration: none;
     color: #000;
 }

@@ -6,7 +6,7 @@ authors = [
 description = "Frappe plugin that displays a list of current active users."
 keywords = ["frappe", "users", "active users"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: JavaScript"
 ]
