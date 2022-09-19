@@ -1,5 +1,12 @@
+# Active Users © 2022
+# Author:  Ameen Ahmed
+# Company: Level Up Marketing & Software Development Services
+# Licence: Please refer to license.txt
+
+
 from . import __version__ as app_version
 from frappe import __version__ as frappe_version
+
 
 app_name = "active_users"
 app_title = "Active Users"
