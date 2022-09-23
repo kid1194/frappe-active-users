@@ -15,28 +15,60 @@ frappe.ActiveUsers = class ActiveUsers {
             frappe.throw(__('Active Users plugin can not be used outside Desk.'));
             return;
         }
+        this.is_online = frappe.is_online ? frappe.is_online() : false;
+        this._on_online = null;
+        this._on_offline = null;
+        
+        var me = this;
+        $(window).on('online', function() {
+            me.is_online = true;
+            me._on_online && me._on_online.call(me);
+            me._on_online = null;
+        });
+        $(window).on('offline', function() {
+            me.is_online = false;
+            me._on_offline && me._on_offline.call(me);
+            me._on_offline = null;
+        });
+        
         this.settings = {};
         this.data = [];
+        
         this.setup_app();
     }
-    request(method, callback, type) {
+    request(method, args, callback, type) {
         var me = this;
-        let p = frappe.call({
+        let data = {
             method: 'active_users.api.handler.' + method,
             'async': true,
             freeze: false,
-        });
-        p.then(function(res) {
-            if (res && $.isPlainObject(res)) res = res.message || res;
-            if (!$.isPlainObject(res)) {
-                frappe.throw(__('Active Users plugin received invalid ' + type + '.'));
-                return;
-            }
-            callback.apply(me, [res]);
-        });
+        },
+        p = null;
+        
+        if ($.isPlainObject(args)) data.args = args;
+        
+        try {
+            p = frappe.call(data);
+            p.then(function(res) {
+                if (res && $.isPlainObject(res)) res = res.message || res;
+                if (!$.isPlainObject(res)) {
+                    frappe.throw(__('Active Users plugin received invalid ' + type + '.'));
+                    return;
+                }
+                callback.call(me, res);
+            });
+        } catch(e) {
+            (console.error || console.log)('[Active Users]: ' + __('An error has occurred while sending a request.'), e);
+        }
+        
         return p;
     }
     setup_app() {
+        if (!this.is_online) {
+            this._on_online = this.setup_app;
+            return;
+        }
+        
         var me = this;
         this.sync_settings()
         .then(function() {
@@ -48,15 +80,22 @@ frappe.ActiveUsers = class ActiveUsers {
         });
     }
     update_settings() {
+        if (!this.is_online) {
+            this._on_online = this.update_settings;
+            return;
+        }
+        
         var me = this;
         this.sync_settings()
         .then(function() {
             if (!me.settings.is_enabled) me.destroy();
+            else me.setup_manual_sync();
         });
     }
     sync_settings() {
         return this.request(
             'get_settings',
+            null,
             function(res) {
                 this.settings = res;
                 this.settings.refresh_interval = cint(this.settings.refresh_interval) * 60000;
@@ -108,11 +147,7 @@ frappe.ActiveUsers = class ActiveUsers {
         this.$footer = this.$app.find('.active-users-footer-text');
         this.$reload = this.$app.find('.active-users-footer-reload');
         
-        var me = this;
-        this.$reload.on('click', function(e) {
-            e.preventDefault();
-            if (!me._syncing) me.sync_reload();
-        });
+        this.setup_manual_sync();
         
         frappe.dom.eval(`
 (function(){window.$clamp=function(c,d){function s(a,b){n.getComputedStyle||(n.getComputedStyle=function(a,b){this.el=a;this.getPropertyValue=function(b){var c=/(\-([a-z]){1})/g;"float"==b&&(b="styleFloat");c.test(b)&&(b=b.replace(c,function(a,b,c){return c.toUpperCase()}));return a.currentStyle&&a.currentStyle[b]?a.currentStyle[b]:null};return this});return n.getComputedStyle(a,null).getPropertyValue(b)}function t(a){a=a||c.clientHeight;var b=u(c);return Math.max(Math.floor(a/b),0)}function x(a){return u(c)*
@@ -121,6 +156,17 @@ k.shift():"",f=e.split(h));1<f.length?(q=f.pop(),r(a,f.join(h))):f=null;m&&(a.no
 var n=window,b={clamp:d.clamp||2,useNativeClamp:"undefined"!=typeof d.useNativeClamp?d.useNativeClamp:!0,splitOnChars:d.splitOnChars||[".","-","\u2013","\u2014"," "],animate:d.animate||!1,truncationChar:d.truncationChar||"\u2026",truncationHTML:d.truncationHTML},e=c.style,y=c.innerHTML,z="undefined"!=typeof c.style.webkitLineClamp,g=b.clamp,v=g.indexOf&&(-1<g.indexOf("px")||-1<g.indexOf("em")),m;b.truncationHTML&&(m=document.createElement("span"),m.innerHTML=b.truncationHTML);var k=b.splitOnChars.slice(0),
 h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.overflow="hidden",e.textOverflow="ellipsis",e.webkitBoxOrient="vertical",e.display="-webkit-box",e.webkitLineClamp=g,v&&(e.height=b.clamp+"px")):(e=x(g),e<=c.clientHeight&&(w=p(l(c),e)));return{original:y,clamped:w}}})();
         `);
+    }
+    setup_manual_sync() {
+        if (this.settings.allow_manual_refresh) {
+            var me = this;
+            this.$reload.on('click', function(e) {
+                e.preventDefault();
+                if (!me._syncing) me.sync_reload();
+            }).show();
+        } else {
+            this.$reload.off('click').hide();
+        }
     }
     setup_sync() {
         var me = this;
@@ -135,6 +181,8 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
         }
     }
     sync_reload() {
+        if (!this.is_online) return;
+        
         var me = this;
         this.clear_sync();
         frappe.run_serially([
@@ -151,6 +199,7 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
         this.$loading.show();
         this.request(
             'get_users',
+            {user_types: this.settings.user_types},
             function(res) {
                 this.data = res.users;
                 this.$loading.hide();
@@ -178,18 +227,16 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
     }
     destory() {
         this.clear_sync();
-        this.$reload.off('click');
+        if (this.settings.allow_manual_refresh) this.$reload.off('click');
         this.$app.remove();
         this.data = this.$app = this.$body = this.$loading = this.$footer = this.$reload = null;
     }
 };
 
-frappe.ActiveUsers.start = function() {
-    if (frappe._active_users && frappe._active_users.destory) {
-        frappe._active_users.destory();
-    }
+frappe._active_users.start = function() {
+    if (frappe._active_users._init) frappe._active_users._init.destory();
     if (frappe.desk == null) return;
-    frappe._active_users = new frappe.ActiveUsers();
+    frappe._active_users._init = new frappe.ActiveUsers();
 };
         
-$(document).ready(function() { frappe.ActiveUsers.start(); });
+$(document).ready(function() { frappe._active_users.start(); });

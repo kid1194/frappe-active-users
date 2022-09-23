@@ -6,24 +6,32 @@
 
 import frappe
 
+from active_users.api.handler import _SETTINGS_CACHE_KEY
+
 
 def after_install():
+    frappe.cache().delete_key(_SETTINGS_CACHE_KEY)
     frappe.clear_cache()
-    frappe.cache().delete_key("active_users_settings")
-    roles = frappe.db.get_list(
+    
+    settings = frappe.get_doc("Active Users Settings")
+    changed = False
+    
+    if frappe.db.exists("User Type", "System User"):
+        settings.append("user_types", {"user_type": "System User"})
+        changed = True
+    
+    if (roles := frappe.db.get_list(
         "Role",
         fields=["name"],
         filters={
             "name": ["in", ["Administrator", "System Manager"]],
         },
         pluck="name"
-    )
-    
-    if roles:
-        settings = frappe.get_doc("Active Users Settings")
-        settings_roles = [v.role for v in settings.roles if v.role in roles]
-        if not settings_roles:
+    )):
+        if not len([v.role for v in settings.roles if v.role in roles]):
             for r in roles:
                 settings.append("roles", {"role": r})
+                changed = True
         
-            settings.save(ignore_permissions=True)
+    if changed:
+        settings.save(ignore_permissions=True)

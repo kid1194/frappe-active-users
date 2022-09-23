@@ -9,8 +9,6 @@ frappe.provide('frappe._active_users');
 
 frappe.ui.form.on('Active Users Settings', {
     after_save: function(frm) {
-        if (frappe._active_users.update_settings) {
-            frappe._active_users.update_settings();
-        }
+        if (frappe._active_users._init) frappe._active_users._init.update_settings();
     }
 });

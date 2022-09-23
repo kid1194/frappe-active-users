@@ -4,7 +4,8 @@
 # Licence: Please refer to license.txt
 
 
-from __future__ import unicode_literals
+from frappe.model.document import Document
 
 
-__version__ = "1.0.1"
+class ActiveUsersHasUserType(Document):
+    pass

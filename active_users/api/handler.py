@@ -28,7 +28,9 @@ def get_settings():
     
     result = {
         "is_enabled": False,
-        "refresh_interval": 5
+        "refresh_interval": 5,
+        "allow_manual_refresh": False,
+        "user_types": [],
     }
     status = 0
     settings = frappe.get_doc("Active Users Settings")
@@ -49,13 +51,18 @@ def get_settings():
     if status == 1:
         result["is_enabled"] = True
         result["refresh_interval"] = cint(settings.refresh_interval)
+        result["allow_manual_refresh"] = True if settings.allow_manual_refresh else False
+        result["user_types"] = [v.user_type for v in settings.user_types]
     
     frappe.cache().hset(_SETTINGS_CACHE_KEY, user, result)
     return result
 
 
 @frappe.whitelist()
-def get_users():
+def get_users(user_types: list):
+    if not user_types:
+        user_types = ["System User"]
+    
     tp = [0, -20, 0]
     sess_expiry = frappe.db.get_value("System Settings", None, "session_expiry")
     
@@ -77,7 +84,7 @@ def get_users():
         frappe.qb.from_(doc)
         .select(doc.name, doc.full_name, doc.user_image)
         .where(doc.enabled == 1)
-        .where(doc.user_type != "Website User")
+        .where(doc.user_type.isin(user_types))
         .where(doc.last_active.between(start, end))
         .orderby(doc.full_name)
     ).run(as_dict=True)

@@ -8,7 +8,9 @@
   "is_enabled",
   "info_column",
   "refresh_interval",
+  "allow_manual_refresh",
   "visibility_section",
+  "user_types",
   "hidden_from_listed_roles",
   "roles",
   "hidden_from_listed_users",
@@ -39,9 +41,21 @@
    "default": "5"
   },
   {
+   "fieldname": "allow_manual_refresh",
+   "fieldtype": "Check",
+   "label": "Allow Manual Refresh",
+   "default": "1"
+  },
+  {
    "fieldname": "visibility_section",
    "fieldtype": "Section Break",
    "label": "Visibility"
+  },
+  {
+   "fieldname": "user_types",
+   "fieldtype": "Table MultiSelect",
+   "label": "User Types To Display",
+   "options": "Active Users Has User Type"
   },
   {
    "fieldname": "hidden_from_listed_roles",
