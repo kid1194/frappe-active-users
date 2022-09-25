@@ -64,7 +64,7 @@ def get_settings():
 
 
 @frappe.whitelist()
-def get_users(user_types):
+def get_users(user_types=None):
     if user_types and isinstance(user_types, str):
         try:
             user_types = json.loads(user_types)
