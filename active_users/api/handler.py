@@ -89,11 +89,13 @@ def get_users(user_types):
             if sess_list and not isinstance(sess_list, list):
                 sess_list = [sess_list]
             if sess_list and isinstance(sess_list, list):
-                for i, v in enumerate(sess_list):
+                idx = 0
+                for v in sess_list:
                     if v and isinstance(v, str):
                         tpv = cint(v)
                         if tpv:
-                            tp[i] = -abs(tpv)
+                            tp[idx] = -abs(tpv)
+                    idx += 1
             else:
                 return {"error": True, "message": "The system session expiry value is invalid."}
     except Exception:
