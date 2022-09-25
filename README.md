@@ -57,7 +57,7 @@ bench get-app https://github.com/kid1194/frappe-active-users
 *(Required only once)*
 
 ```
-bench build --apps active_users
+bench build --app active_users
 ```
 
 4. Install plugin on a specific site
@@ -90,7 +90,7 @@ cd ~/frappe-bench
 4. Build plugin
 
 ```
-bench build --apps active_users
+bench build --app active_users
 ```
 
 5. Update a specific site
