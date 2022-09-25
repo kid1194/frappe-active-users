@@ -104,7 +104,15 @@ frappe.ActiveUsers = class ActiveUsers {
         this.sync_settings()
         .then(function() {
             if (!me.settings.is_enabled) me.destroy();
-            else me.setup_manual_sync();
+            else {
+                if (!me.data) {
+                    me.data = [];
+                    frappe.run_serially([
+                        function() { me.setup_display(); },
+                        function() { me.sync_reload(); },
+                    ]);
+                } else me.setup_manual_sync();
+            }
         });
     }
     sync_settings() {
