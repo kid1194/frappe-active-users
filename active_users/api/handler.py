@@ -8,7 +8,6 @@ import json
 
 import frappe
 from frappe.utils import cint, has_common, now, add_to_date
-from frappe.model.document import Document
 
 
 _SETTINGS_CACHE_KEY = "active_users_settings"
@@ -76,21 +75,27 @@ def get_users(user_types):
         user_types = ["System User"]
     
     tp = [0, -20, 0]
-    sess_expiry = frappe.db.get_value("System Settings", None, "session_expiry")
+    sys_settings = frappe.get_single("System Settings")
     
+    sess_expiry = sys_settings.session_expiry
     if not sess_expiry or not isinstance(sess_expiry, str):
-        sess_expiry = frappe.db.get_value("System Settings", None, "session_expiry_mobile")
+        sess_expiry = sys_settings.session_expiry_mobile
+    if not sess_expiry or not isinstance(sess_expiry, str):
+        sess_expiry = ""
     
     try:
-        if sess_expiry and isinstance(sess_expiry, str):
-            sess_expiry = sess_expiry.split(":")
-            if sess_expiry and not isinstance(sess_expiry, list):
-                sess_expiry = [sess_expiry]
-            if sess_expiry and isinstance(sess_expiry, list):
-                for i in range(len(sess_expiry)):
-                    tpv = cint(sess_expiry[i])
-                    if tpv:
-                        tp[i] = -abs(tpv)
+        if sess_expiry:
+            sess_list = sess_expiry.split(":")
+            if sess_list and not isinstance(sess_list, list):
+                sess_list = [sess_list]
+            if sess_list and isinstance(sess_list, list):
+                for i, v in enumerate(sess_list):
+                    if v and isinstance(v, str):
+                        tpv = cint(v)
+                        if tpv:
+                            tp[i] = -abs(tpv)
+            else:
+                return {"error": True, "message": "The system session expiry value is invalid."}
     except Exception:
         return {"error": True, "message": "Unable to parse the system session expiry value."}
     

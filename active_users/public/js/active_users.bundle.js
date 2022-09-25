@@ -16,8 +16,6 @@ frappe.ActiveUsers = class ActiveUsers {
             return;
         }
         this.is_online = frappe.is_online ? frappe.is_online() : false;
-        this._on_online = null;
-        this._on_offline = null;
         
         var me = this;
         $(window).on('online', function() {
@@ -34,7 +32,19 @@ frappe.ActiveUsers = class ActiveUsers {
         this.settings = {};
         this.data = [];
         
-        this.setup_app();
+        this.setup();
+    }
+    destroy() {
+        this.clear_sync();
+        if (this.$loading) this.$loading.hide();
+        if (this.$reload) this.$reload.off('click').hide();
+        if (this.$app) this.$app.remove();
+        this.data = this._on_online = this._on_offline = this._syncing = null;
+        this.$app = this.$body = this.$loading = this.$footer = this.$reload = null;
+    }
+    error(msg) {
+        this.destroy();
+        frappe.throw(__(msg));
     }
     request(method, args, callback, type) {
         var me = this;
@@ -52,30 +62,25 @@ frappe.ActiveUsers = class ActiveUsers {
             p.then(function(res) {
                 if (res && $.isPlainObject(res)) res = res.message || res;
                 if (!$.isPlainObject(res)) {
-                    me.$loading.hide();
-                    me.clear_sync();
-                    frappe.throw(__('Active Users plugin received invalid ' + type + '.'));
+                    me.error('Active Users plugin received invalid ' + type + '.');
                     return;
                 }
                 if (res.error) {
-                    me.$loading.hide();
-                    me.clear_sync();
-                    frappe.throw(__(res.message));
+                    me.error(res.message);
                     return;
                 }
                 callback.call(me, res);
             });
         } catch(e) {
-            this.$loading.hide();
-            this.clear_sync();
-            (console.error || console.log)('[Active Users]: ' + __('An error has occurred while sending a request.'), e);
+            this.error('An error has occurred while sending a request.');
+            (console.error || console.log)('[Active Users]', e);
         }
         
         return p;
     }
-    setup_app() {
+    setup() {
         if (!this.is_online) {
-            this._on_online = this.setup_app;
+            this._on_online = this.setup;
             return;
         }
         
@@ -159,6 +164,8 @@ frappe.ActiveUsers = class ActiveUsers {
         
         this.setup_manual_sync();
         
+        if (frappe.ActiveUsers._ready) return;
+        frappe.ActiveUsers._ready = true;
         frappe.dom.eval(`
 (function(){window.$clamp=function(c,d){function s(a,b){n.getComputedStyle||(n.getComputedStyle=function(a,b){this.el=a;this.getPropertyValue=function(b){var c=/(\-([a-z]){1})/g;"float"==b&&(b="styleFloat");c.test(b)&&(b=b.replace(c,function(a,b,c){return c.toUpperCase()}));return a.currentStyle&&a.currentStyle[b]?a.currentStyle[b]:null};return this});return n.getComputedStyle(a,null).getPropertyValue(b)}function t(a){a=a||c.clientHeight;var b=u(c);return Math.max(Math.floor(a/b),0)}function x(a){return u(c)*
 a}function u(a){var b=s(a,"line-height");"normal"==b&&(b=1.2*parseInt(s(a,"font-size")));return parseInt(b)}function l(a){if(a.lastChild.children&&0<a.lastChild.children.length)return l(Array.prototype.slice.call(a.children).pop());if(a.lastChild&&a.lastChild.nodeValue&&""!=a.lastChild.nodeValue&&a.lastChild.nodeValue!=b.truncationChar)return a.lastChild;a.lastChild.parentNode.removeChild(a.lastChild);return l(c)}function p(a,d){if(d){var e=a.nodeValue.replace(b.truncationChar,"");f||(h=0<k.length?
@@ -234,12 +241,6 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
             $clamp(item.find('.active-users-item-name').get(0), {clamp: 1});
         });
         this.$footer.html(__('Total') + ': ' + this.data.length);
-    }
-    destory() {
-        this.clear_sync();
-        if (this.settings.allow_manual_refresh) this.$reload.off('click');
-        this.$app.remove();
-        this.data = this.$app = this.$body = this.$loading = this.$footer = this.$reload = null;
     }
 };
 
