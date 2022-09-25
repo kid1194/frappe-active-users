@@ -52,12 +52,22 @@ frappe.ActiveUsers = class ActiveUsers {
             p.then(function(res) {
                 if (res && $.isPlainObject(res)) res = res.message || res;
                 if (!$.isPlainObject(res)) {
+                    me.$loading.hide();
+                    me.clear_sync();
                     frappe.throw(__('Active Users plugin received invalid ' + type + '.'));
+                    return;
+                }
+                if (res.error) {
+                    me.$loading.hide();
+                    me.clear_sync();
+                    frappe.throw(__(res.message));
                     return;
                 }
                 callback.call(me, res);
             });
         } catch(e) {
+            this.$loading.hide();
+            this.clear_sync();
             (console.error || console.log)('[Active Users]: ' + __('An error has occurred while sending a request.'), e);
         }
         
@@ -143,7 +153,7 @@ frappe.ActiveUsers = class ActiveUsers {
         $('header.navbar > .container > .navbar-collapse > ul.navbar-nav').prepend(this.$app.get(0));
         
         this.$body = this.$app.find('.active-users-list-body');
-        this.$loading = this.$body.find('.active-users-list-loading');
+        this.$loading = this.$body.find('.active-users-list-loading').hide();
         this.$footer = this.$app.find('.active-users-footer-text');
         this.$reload = this.$app.find('.active-users-footer-reload');
         

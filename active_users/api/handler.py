@@ -4,8 +4,11 @@
 # Licence: Please refer to license.txt
 
 
+import json
+
 import frappe
-from frappe.utils import cint, has_common, get_datetime_str, get_timedelta, now, now_datetime, add_to_date
+from frappe.utils import cint, has_common, now, add_to_date
+from frappe.model.document import Document
 
 
 _SETTINGS_CACHE_KEY = "active_users_settings"
@@ -23,7 +26,10 @@ def on_logout():
 def get_settings():
     user = frappe.session.user
     cache = frappe.cache().hget(_SETTINGS_CACHE_KEY, user)
-    if isinstance(cache, dict) and "refresh_interval" in cache:
+    if (
+        isinstance(cache, dict) and "refresh_interval" in cache and
+        "allow_manual_refresh" in cache and "user_types" in cache
+    ):
         return cache
     
     result = {
@@ -33,7 +39,7 @@ def get_settings():
         "user_types": [],
     }
     status = 0
-    settings = frappe.get_doc("Active Users Settings")
+    settings = frappe.get_single("Active Users Settings")
     
     if not settings.is_enabled:
         status = 2
@@ -59,8 +65,14 @@ def get_settings():
 
 
 @frappe.whitelist()
-def get_users(user_types: list):
-    if not user_types:
+def get_users(user_types):
+    if user_types and isinstance(user_types, str):
+        try:
+            user_types = json.loads(user_types)
+        except Exception:
+            return {"error": True, "message": "Unable to parse the json user types value."}
+    
+    if not user_types or not isinstance(user_types, list):
         user_types = ["System User"]
     
     tp = [0, -20, 0]
@@ -69,24 +81,32 @@ def get_users(user_types: list):
     if not sess_expiry or not isinstance(sess_expiry, str):
         sess_expiry = frappe.db.get_value("System Settings", None, "session_expiry_mobile")
     
-    if sess_expiry and isinstance(sess_expiry, str):
-        sess_expiry = sess_expiry.split(":")
-        for i in range(len(sess_expiry)):
-            tp[i] = cint(sess_expiry[i])
-            if tp[i]:
-                tp[i] = -abs(tp[i])
+    try:
+        if sess_expiry and isinstance(sess_expiry, str):
+            sess_expiry = sess_expiry.split(":")
+            if sess_expiry and not isinstance(sess_expiry, list):
+                sess_expiry = [sess_expiry]
+            if sess_expiry and isinstance(sess_expiry, list):
+                for i in range(len(sess_expiry)):
+                    tpv = cint(sess_expiry[i])
+                    if tpv:
+                        tp[i] = -abs(tpv)
+    except Exception:
+        return {"error": True, "message": "Unable to parse the system session expiry value."}
     
     end = now()
     start = add_to_date(end, hours=tp[0], minutes=tp[1], seconds=tp[2], as_string=True, as_datetime=True)
     
-    doc = frappe.qb.DocType("User")
-    data = (
-        frappe.qb.from_(doc)
-        .select(doc.name, doc.full_name, doc.user_image)
-        .where(doc.enabled == 1)
-        .where(doc.user_type.isin(user_types))
-        .where(doc.last_active.between(start, end))
-        .orderby(doc.full_name)
-    ).run(as_dict=True)
-    
-    return {"users": data}
+    try:
+        doc = frappe.qb.DocType("User")
+        data = (
+            frappe.qb.from_(doc)
+            .select(doc.name, doc.full_name, doc.user_image)
+            .where(doc.enabled == 1)
+            .where(doc.user_type.isin(user_types))
+            .where(doc.last_active.between(start, end))
+            .orderby(doc.full_name)
+        ).run(as_dict=True)
+        return {"users": data}
+    except Exception:
+        return {"error": True, "message": "Unable to get the list of active users."}
