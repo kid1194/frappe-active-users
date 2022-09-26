@@ -11,6 +11,7 @@ from frappe.utils import cint, has_common, now, add_to_date
 
 
 _SETTINGS_CACHE_KEY = "active_users_settings"
+_SETTINGS_DOCTYPE = "Active Users Settings"
 
 
 def on_login(login_manager):
@@ -26,8 +27,9 @@ def get_settings():
     user = frappe.session.user
     cache = frappe.cache().hget(_SETTINGS_CACHE_KEY, user)
     if (
-        isinstance(cache, dict) and "refresh_interval" in cache and
-        "allow_manual_refresh" in cache and "user_types" in cache
+        isinstance(cache, dict) and
+        "refresh_interval" in cache and
+        "allow_manual_refresh" in cache
     ):
         return cache
     
@@ -35,10 +37,9 @@ def get_settings():
         "is_enabled": False,
         "refresh_interval": 5,
         "allow_manual_refresh": False,
-        "user_types": [],
     }
     status = 0
-    settings = frappe.get_single("Active Users Settings")
+    settings = frappe.get_cached_doc(_SETTINGS_DOCTYPE, _SETTINGS_DOCTYPE)
     
     if not settings.is_enabled:
         status = 2
@@ -57,25 +58,17 @@ def get_settings():
         result["is_enabled"] = True
         result["refresh_interval"] = cint(settings.refresh_interval)
         result["allow_manual_refresh"] = True if settings.allow_manual_refresh else False
-        result["user_types"] = [v.user_type for v in settings.user_types]
     
     frappe.cache().hset(_SETTINGS_CACHE_KEY, user, result)
     return result
 
 
 @frappe.whitelist()
-def get_users(user_types=None):
-    if user_types and isinstance(user_types, str):
-        try:
-            user_types = json.loads(user_types)
-        except Exception:
-            return {"error": True, "message": "Unable to parse the json user types value."}
-    
-    if not user_types or not isinstance(user_types, list):
-        user_types = ["System User"]
-    
+def get_users():
+    settings = frappe.get_cached_doc(_SETTINGS_DOCTYPE, _SETTINGS_DOCTYPE)
+    user_types = [v.user_type for v in settings.user_types]
+    sys_settings = frappe.get_cached_doc("System Settings", "System Settings")
     tp = [0, -20, 0]
-    sys_settings = frappe.get_single("System Settings")
     
     sess_expiry = sys_settings.session_expiry
     if not sess_expiry or not isinstance(sess_expiry, str):
@@ -105,15 +98,17 @@ def get_users(user_types=None):
     start = add_to_date(end, hours=tp[0], minutes=tp[1], seconds=tp[2], as_string=True, as_datetime=True)
     
     try:
-        doc = frappe.qb.DocType("User")
-        data = (
-            frappe.qb.from_(doc)
-            .select(doc.name, doc.full_name, doc.user_image)
-            .where(doc.enabled == 1)
-            .where(doc.user_type.isin(user_types))
-            .where(doc.last_active.between(start, end))
-            .orderby(doc.full_name)
-        ).run(as_dict=True)
+        data = frappe.get_all(
+            "User",
+            fields=["name", "full_name", "user_image"],
+            filters={
+                "enabled": 1,
+                "user_type": ["in", user_type],
+                "last_active": ["between", [start, end]],
+            },
+            order_by="full_name asc",
+            limit_page_length=0,
+        )
         return {"users": data}
     except Exception:
         return {"error": True, "message": "Unable to get the list of active users."}

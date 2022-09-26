@@ -46,7 +46,7 @@ frappe.ActiveUsers = class ActiveUsers {
         this.destroy();
         frappe.throw(__(msg));
     }
-    request(method, args, callback, type) {
+    request(method, callback, type) {
         var me = this;
         let data = {
             method: 'active_users.api.handler.' + method,
@@ -54,8 +54,6 @@ frappe.ActiveUsers = class ActiveUsers {
             freeze: false,
         },
         p = null;
-        
-        if ($.isPlainObject(args)) data.args = args;
         
         try {
             p = frappe.call(data);
@@ -118,7 +116,6 @@ frappe.ActiveUsers = class ActiveUsers {
     sync_settings() {
         return this.request(
             'get_settings',
-            null,
             function(res) {
                 this.settings = res;
                 this.settings.refresh_interval = cint(this.settings.refresh_interval) * 60000;
@@ -224,7 +221,6 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
         this.$loading.show();
         this.request(
             'get_users',
-            {user_types: this.settings.user_types},
             function(res) {
                 this.data = res.users;
                 this.$loading.hide();

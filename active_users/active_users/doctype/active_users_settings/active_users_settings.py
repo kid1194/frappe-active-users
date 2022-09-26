@@ -12,4 +12,5 @@ from active_users.api.handler import _SETTINGS_CACHE_KEY
 
 class ActiveUsersSettings(Document):
 	def before_save(self):
+	    frappe.clear_cache(doctype="Active Users Settings")
 	    frappe.cache().hdel(_SETTINGS_CACHE_KEY, frappe.session.user)
