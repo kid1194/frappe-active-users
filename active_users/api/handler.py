@@ -101,11 +101,11 @@ def get_users():
         data = frappe.get_all(
             "User",
             fields=["name", "full_name", "user_image"],
-            filters={
-                "enabled": 1,
-                "user_type": ["in", user_type],
-                "last_active": ["between", [start, end]],
-            },
+            filters=[
+                ["enabled", "=", 1],
+                ["user_type", "in", user_type],
+                ["last_active", "between", [start, end]],
+            ],
             order_by="full_name asc",
             limit_page_length=0,
         )
