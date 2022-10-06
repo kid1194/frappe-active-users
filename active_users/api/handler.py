@@ -103,12 +103,13 @@ def get_users():
             fields=["name", "full_name", "user_image"],
             filters={
                 "enabled": 1,
-                "user_type": ["in", user_type],
+                "user_type": ["in", user_types],
                 "last_active": ["between", [start, end]],
             },
             order_by="full_name asc",
             limit_page_length=0,
         )
         return {"users": data}
-    except Exception:
+    except Exception as ex:
+        print(f"Exception in get_users(): {ex}")  # just for debugging purposes in console
         return {"error": True, "message": "Unable to get the list of active users."}
