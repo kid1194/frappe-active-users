@@ -3,7 +3,7 @@
 A small plugin for Frappe that displays a list of current active users.
 
 <div style="width:100%;text-align:center">
-    <img src="https://github.com/kid1194/frappe-active-users/blob/main/images/image.png?raw=true" alt="Active ausers"/>
+    <img src="https://github.com/kid1194/active_users/blob/main/images/image.png?raw=true" alt="Active ausers"/>
 </div>
 
 ---
@@ -49,7 +49,7 @@ cd ~/frappe-bench
 *(Required only once)*
 
 ```
-bench get-app https://github.com/kid1194/frappe-active-users
+bench get-app https://github.com/kid1194/active_users
 ```
 
 3. Build plugin
