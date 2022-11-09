@@ -4,4 +4,8 @@
 # Licence: Please refer to license.txt
 
 
-__version__ = "1.0.4"
+from frappe.model.document import Document
+
+
+class ActiveUsersNotificationReceiver(Document):
+    pass

@@ -6,19 +6,18 @@
 
 import frappe
 
-from active_users.api.handler import _SETTINGS_CACHE_KEY
+from active_users.utils.common import _SETTINGS_, settings, clear_document_cache
+from .migrate import after_migrate
 
 
 def after_install():
-    frappe.cache().delete_key(_SETTINGS_CACHE_KEY)
+    clear_document_cache(_SETTINGS_)
     frappe.clear_cache()
     
-    settings = frappe.get_doc("Active Users Settings")
-    changed = False
+    doc = settings(True)
     
     if frappe.db.exists("User Type", "System User"):
-        settings.append("user_types", {"user_type": "System User"})
-        changed = True
+        doc.append("user_types", {"user_type": "System User"})
     
     if (roles := frappe.db.get_list(
         "Role",
@@ -28,10 +27,12 @@ def after_install():
         },
         pluck="name"
     )):
-        if not len([v.role for v in settings.roles if v.role in roles]):
-            for r in roles:
-                settings.append("roles", {"role": r})
-                changed = True
+        if doc.roles:
+            doc.roles.clear()
         
-    if changed:
-        settings.save(ignore_permissions=True)
+        for r in roles:
+            doc.append("roles", {"role": r})
+    
+    doc.save(ignore_permissions=True)
+        
+    after_migrate()

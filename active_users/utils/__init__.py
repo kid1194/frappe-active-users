@@ -4,4 +4,5 @@
 # Licence: Please refer to license.txt
 
 
-__version__ = "1.0.4"
+from .common import *
+from .update import *

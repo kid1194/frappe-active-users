@@ -7,10 +7,15 @@
 import frappe
 from frappe.model.document import Document
 
-from active_users.api.handler import _SETTINGS_CACHE_KEY
+from active_users.utils import clear_document_cache, compare_versions
+from active_users import __version__
 
 
 class ActiveUsersSettings(Document):
+    @property
+    def has_update(self):
+        return 1 if compare_versions(self.latest_version, __version__) > 0 else 0
+    
+    
 	def before_save(self):
-	    frappe.clear_cache(doctype="Active Users Settings")
-	    frappe.cache().hdel(_SETTINGS_CACHE_KEY, frappe.session.user)
+	    clear_document_cache(self.doctype)

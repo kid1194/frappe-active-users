@@ -5,28 +5,32 @@
 *  Licence: Please refer to license.txt
 */
 
-frappe.provide('frappe.ActiveUsers');
+
 frappe.provide('frappe._active_users');
 frappe.provide('frappe.dom');
 
-frappe.ActiveUsers = class ActiveUsers {
+
+class ActiveUsers {
     constructor() {
         if (frappe.desk == null) {
             frappe.throw(__('Active Users plugin can not be used outside Desk.'));
             return;
         }
+        this.started = true;
         this.is_online = frappe.is_online ? frappe.is_online() : false;
+        this.on_online = null;
+        this.on_offline = null;
         
         var me = this;
         $(window).on('online', function() {
             me.is_online = true;
-            me._on_online && me._on_online.call(me);
-            me._on_online = null;
+            me.on_online && me.on_online.call(me);
+            me.on_online = null;
         });
         $(window).on('offline', function() {
             me.is_online = false;
-            me._on_offline && me._on_offline.call(me);
-            me._on_offline = null;
+            me.on_offline && me.on_offline.call(me);
+            me.on_offline = null;
         });
         
         this.settings = {};
@@ -42,83 +46,65 @@ frappe.ActiveUsers = class ActiveUsers {
         this.data = this._on_online = this._on_offline = this._syncing = null;
         this.$app = this.$body = this.$loading = this.$footer = this.$reload = null;
     }
-    error(msg) {
+    error(msg, args) {
         this.destroy();
-        frappe.throw(__(msg));
+        frappe.throw(__(msg, args));
     }
     request(method, callback, type) {
         var me = this;
-        let data = {
-            method: 'active_users.api.handler.' + method,
-            'async': true,
-            freeze: false,
-        },
-        p = null;
-        
-        try {
-            p = frappe.call(data);
-            p.then(function(res) {
-                if (res && $.isPlainObject(res)) res = res.message || res;
-                if (!$.isPlainObject(res)) {
-                    me.error('Active Users plugin received invalid ' + type + '.');
-                    return;
+        return new Promise(function(resolve, reject) {
+            let data = {
+                method: 'active_users.utils.api.' + method,
+                'async': true,
+                freeze: false,
+                callback: function(res) {
+                    if (res && $.isPlainObject(res)) res = res.message || res;
+                    if (!$.isPlainObject(res)) {
+                        me.error('Active Users plugin received invalid ' + type + '.');
+                        reject();
+                        return;
+                    }
+                    if (res.error) {
+                        me.error(res.message);
+                        reject();
+                        return;
+                    }
+                    let val = callback && callback.call(me, res);
+                    resolve(val || res);
                 }
-                if (res.error) {
-                    me.error(res.message);
-                    return;
-                }
-                callback.call(me, res);
-            });
-        } catch(e) {
-            this.error('An error has occurred while sending a request.');
-            (console.error || console.log)('[Active Users]', e);
-        }
-        
-        return p;
+            };
+            try {
+                frappe.call(data);
+            } catch(e) {
+                (console.error || console.log)('[Active Users]', e);
+                this.error('An error has occurred while sending a request.');
+                reject();
+            }
+        });
     }
     setup() {
         if (!this.is_online) {
-            this._on_online = this.setup;
+            this.on_online = this.setup;
             return;
         }
-        
         var me = this;
         this.sync_settings()
         .then(function() {
-            if (!me.settings.is_enabled) return;
+            if (!me.settings.enabled) return;
             frappe.run_serially([
                 function() { me.setup_display(); },
                 function() { me.sync_reload(); },
             ]);
         });
     }
-    update_settings() {
-        if (!this.is_online) {
-            this._on_online = this.update_settings;
-            return;
-        }
-        
-        var me = this;
-        this.sync_settings()
-        .then(function() {
-            if (!me.settings.is_enabled) me.destroy();
-            else {
-                if (!me.data) {
-                    me.data = [];
-                    frappe.run_serially([
-                        function() { me.setup_display(); },
-                        function() { me.sync_reload(); },
-                    ]);
-                } else me.setup_manual_sync();
-            }
-        });
-    }
     sync_settings() {
         return this.request(
             'get_settings',
             function(res) {
+                res.enabled = cint(res.enabled);
+                res.refresh_interval = cint(res.refresh_interval) * 60000;
+                res.allow_manual_refresh = cint(res.allow_manual_refresh);
                 this.settings = res;
-                this.settings.refresh_interval = cint(this.settings.refresh_interval) * 60000;
             },
             'settings'
         );
@@ -151,7 +137,7 @@ frappe.ActiveUsers = class ActiveUsers {
                                 <div class="col active-users-footer-text"></div>
                                 <div class="col-auto active-users-footer-icon">
                                     <a href="#" class="active-users-footer-reload">
-                                        <span class="fa fa-sync"></span>
+                                        <span class="fa fa-refresh fa-md fa-fw"></span>
                                     </a>
                                 </div>
                             </div>
@@ -169,8 +155,8 @@ frappe.ActiveUsers = class ActiveUsers {
         
         this.setup_manual_sync();
         
-        if (frappe.ActiveUsers._ready) return;
-        frappe.ActiveUsers._ready = true;
+        if (frappe._active_users._ready) return;
+        frappe._active_users._ready = true;
         frappe.dom.eval(`
 (function(){window.$clamp=function(c,d){function s(a,b){n.getComputedStyle||(n.getComputedStyle=function(a,b){this.el=a;this.getPropertyValue=function(b){var c=/(\-([a-z]){1})/g;"float"==b&&(b="styleFloat");c.test(b)&&(b=b.replace(c,function(a,b,c){return c.toUpperCase()}));return a.currentStyle&&a.currentStyle[b]?a.currentStyle[b]:null};return this});return n.getComputedStyle(a,null).getPropertyValue(b)}function t(a){a=a||c.clientHeight;var b=u(c);return Math.max(Math.floor(a/b),0)}function x(a){return u(c)*
 a}function u(a){var b=s(a,"line-height");"normal"==b&&(b=1.2*parseInt(s(a,"font-size")));return parseInt(b)}function l(a){if(a.lastChild.children&&0<a.lastChild.children.length)return l(Array.prototype.slice.call(a.children).pop());if(a.lastChild&&a.lastChild.nodeValue&&""!=a.lastChild.nodeValue&&a.lastChild.nodeValue!=b.truncationChar)return a.lastChild;a.lastChild.parentNode.removeChild(a.lastChild);return l(c)}function p(a,d){if(d){var e=a.nodeValue.replace(b.truncationChar,"");f||(h=0<k.length?
@@ -180,37 +166,30 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
         `);
     }
     setup_manual_sync() {
-        if (this.settings.allow_manual_refresh) {
-            var me = this;
-            this.$reload.on('click', function(e) {
-                e.preventDefault();
-                if (!me._syncing) me.sync_reload();
-            }).show();
-        } else {
+        if (!this.settings.allow_manual_refresh) {
             this.$reload.off('click').hide();
+            return;
         }
-    }
-    setup_sync() {
         var me = this;
-        this.sync_timer = window.setInterval(function() {
-            me.sync_data();
-        }, this.settings.refresh_interval);
-    }
-    clear_sync() {
-        if (this.sync_timer) {
-            window.clearInterval(this.sync_timer);
-            this.sync_timer = null;
-        }
+        this.$reload.on('click', function(e) {
+            e.preventDefault();
+            if (!me._syncing) me.sync_reload();
+        }).show();
     }
     sync_reload() {
         if (!this.is_online) return;
-        
         var me = this;
         this.clear_sync();
         frappe.run_serially([
             function() { me.sync_data(); },
             function() { me.setup_sync(); },
         ]);
+    }
+    clear_sync() {
+        if (this.sync_timer) {
+            window.clearInterval(this.sync_timer);
+            this.sync_timer = null;
+        }
     }
     sync_data() {
         this._syncing = true;
@@ -222,13 +201,37 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
         this.request(
             'get_users',
             function(res) {
-                this.data = res.users;
+                this.data = res.users && Array.isArray(res.users) ? res.users : [];
                 this.$loading.hide();
                 this.update_list();
                 this._syncing = null;
             },
             'users list'
         );
+    }
+    setup_sync() {
+        var me = this;
+        this.sync_timer = window.setInterval(function() {
+            me.sync_data();
+        }, this.settings.refresh_interval);
+    }
+    update_settings() {
+        if (!this.is_online) {
+            this.on_online = this.update_settings;
+            return;
+        }
+        var me = this;
+        this.sync_settings()
+        .then(function() {
+            if (!me.settings.enabled) {
+                me.destroy();
+                return;
+            }
+            frappe.run_serially([
+                function() { me.setup_manual_sync(); },
+                function() { me.sync_reload(); },
+            ]);
+        });
     }
     update_list() {
         var me = this;
@@ -246,12 +249,14 @@ h=k[0],f,q;"auto"==g?g=t():v&&(g=t(parseInt(g)));var w;z&&b.useNativeClamp?(e.ov
         });
         this.$footer.html(__('Total') + ': ' + this.data.length);
     }
-};
+}
 
-frappe._active_users.start = function() {
+frappe._active_users.init = function() {
     if (frappe._active_users._init) frappe._active_users._init.destory();
     if (frappe.desk == null) return;
-    frappe._active_users._init = new frappe.ActiveUsers();
+    frappe._active_users._init = new ActiveUsers();
 };
         
-$(document).ready(function() { frappe._active_users.start(); });
+$(document).ready(function() {
+    frappe._active_users.init();
+});

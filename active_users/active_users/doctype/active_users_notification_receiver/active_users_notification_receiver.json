@@ -1,18 +1,23 @@
 {
  "actions": [],
+ "allow_copy": 1,
+ "allow_import": 1,
+ "editable_grid": 1,
  "autoname": "hash",
  "creation": "2022-04-04 04:04:04.119400",
+ "description": "Active users notification receiver",
  "doctype": "DocType",
+ "document_type": "Document",
  "engine": "InnoDB",
  "field_order": [
-  "role"
+  "user"
  ],
  "fields": [
   {
-   "fieldname": "role",
+   "fieldname": "user",
    "fieldtype": "Link",
-   "label": "Role",
-   "options": "Role",
+   "label": "User",
+   "options": "User",
    "reqd": 1,
    "bold": 1,
    "in_list_view": 1,
@@ -25,10 +30,11 @@
  "modified": "2022-04-04 04:04:04.119400",
  "modified_by": "Administrator",
  "module": "Active Users",
- "name": "Active Users Has Role",
+ "name": "Active Users Notification Receiver",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",
  "sort_order": "DESC",
+ "states": [],
  "track_changes": 1
 }

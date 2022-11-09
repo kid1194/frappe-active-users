@@ -5,7 +5,7 @@
  "engine": "InnoDB",
  "field_order": [
   "info_section",
-  "is_enabled",
+  "enabled",
   "info_column",
   "refresh_interval",
   "allow_manual_refresh",
@@ -16,7 +16,18 @@
   "hidden_from_listed_users",
   "users",
   "visibility_column",
-  "visibility_note"
+  "visibility_note",
+  "update_section",
+  "auto_check_for_update",
+  "send_update_notification",
+  "update_notification_sender",
+  "update_notification_receivers",
+  "update_column",
+  "update_note",
+  "has_update",
+  "latest_version",
+  "latest_check",
+  "check_for_update"
  ],
  "fields": [
   {
@@ -24,7 +35,7 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "is_enabled",
+   "fieldname": "enabled",
    "fieldtype": "Check",
    "label": "Is Enabled",
    "default": "1"
@@ -38,13 +49,15 @@
    "fieldtype": "Int",
    "label": "Refresh Interval (Minutes)",
    "description": "The number of minutes to wait before refreshing the active users list",
-   "default": "5"
+   "default": "5",
+   "read_only_depends_on": "eval:!doc.enabled"
   },
   {
    "fieldname": "allow_manual_refresh",
    "fieldtype": "Check",
    "label": "Allow Manual Refresh",
-   "default": "1"
+   "default": "1",
+   "read_only_depends_on": "eval:!doc.enabled"
   },
   {
    "fieldname": "visibility_section",
@@ -55,29 +68,34 @@
    "fieldname": "user_types",
    "fieldtype": "Table MultiSelect",
    "label": "User Types To Display",
-   "options": "Active Users Has User Type"
+   "options": "Active Users Has User Type",
+   "read_only_depends_on": "eval:!doc.enabled"
   },
   {
    "fieldname": "hidden_from_listed_roles",
    "fieldtype": "Check",
-   "label": "Hidden From Listed Roles"
+   "label": "Hidden From Listed Roles",
+   "read_only_depends_on": "eval:!doc.enabled"
   },
   {
    "fieldname": "roles",
    "fieldtype": "Table MultiSelect",
    "label": "Roles",
-   "options": "Active Users Has Role"
+   "options": "Active Users Has Role",
+   "read_only_depends_on": "eval:!doc.enabled"
   },
   {
    "fieldname": "hidden_from_listed_users",
    "fieldtype": "Check",
-   "label": "Hidden From Listed Users"
+   "label": "Hidden From Listed Users",
+   "read_only_depends_on": "eval:!doc.enabled"
   },
   {
    "fieldname": "users",
    "fieldtype": "Table MultiSelect",
    "label": "Users",
-   "options": "Active Users Has User"
+   "options": "Active Users Has User",
+   "read_only_depends_on": "eval:!doc.enabled"
   },
   {
    "fieldname": "visibility_column",
@@ -89,6 +107,79 @@
    "label": "",
    "options": "<div class=\"font-weight-bold mb-1\">Note:</div>\n<ul>\n<li>\nIf the user has any of the listed <code>Roles</code>, then the visibility of the plugin will depend on the status of the <code>Hidden From Listed Roles</code> checkbox.\n</li>\n<li class=\"mt-1\">\nIf the user exists in the listed <code>Users</code>, then the visibility of the plugin will depend on the status of the <code>Hidden From Listed Users</code> checkbox, bypassing the visibility status of listed <code>Roles</code>.\n</li>\n</ul>",
    "read_only": 1
+  },
+  {
+   "fieldname": "update_section",
+   "fieldtype": "Section Break",
+   "label": "Update Settings"
+  },
+  {
+   "fieldname": "auto_check_for_update",
+   "fieldtype": "Check",
+   "label": "Auto Check",
+   "description": "Auto check for new version daily",
+   "default": "1",
+   "read_only_depends_on": "eval:!doc.enabled"
+  },
+  {
+   "fieldname": "send_update_notification",
+   "fieldtype": "Check",
+   "label": "Send Update Notification",
+   "default": "1",
+   "read_only_depends_on": "eval:!doc.enabled || !doc.auto_check_for_update"
+  },
+  {
+   "fieldname": "update_notification_sender",
+   "fieldtype": "Link",
+   "label": "Update Notification Sender",
+   "options": "User",
+   "read_only_depends_on": "eval:!doc.enabled || !doc.send_update_notification",
+   "mandatory_depends_on": "eval:doc.send_update_notification",
+   "ignore_user_permissions": 1
+  },
+  {
+   "fieldname": "update_notification_receivers",
+   "fieldtype": "Table MultiSelect",
+   "label": "Update Notification Receivers",
+   "options": "Active Users Notification Receiver",
+   "read_only_depends_on": "eval:!doc.enabled || !doc.send_update_notification",
+   "mandatory_depends_on": "eval:doc.send_update_notification"
+  },
+  {
+   "fieldname": "update_column",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "update_note",
+   "fieldtype": "HTML",
+   "label": "Update Note",
+   "read_only": 1
+  },
+  {
+   "fieldname": "has_update",
+   "fieldtype": "Check",
+   "label": "Has Update",
+   "hidden": 1,
+   "is_virtual": 1
+  },
+  {
+   "fieldname": "latest_version",
+   "fieldtype": "Data",
+   "label": "Latest Version",
+   "read_only": 1
+  },
+  {
+   "fieldname": "latest_check",
+   "fieldtype": "Data",
+   "label": "Latest Check",
+   "read_only": 1
+  },
+  {
+   "fieldname": "check_for_update",
+   "fieldtype": "Button",
+   "label": "Check Now",
+   "description": "Check for new version manually",
+   "read_only_depends_on": "eval:!doc.enabled"
   }
  ],
  "icon": "fa fa-cog",
