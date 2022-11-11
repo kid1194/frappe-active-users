@@ -28,7 +28,8 @@ def after_install():
         pluck="name"
     )):
         if doc.roles:
-            doc.roles.clear()
+            for r in doc.roles:
+                doc.remove(r)
         
         for r in roles:
             doc.append("roles", {"role": r})

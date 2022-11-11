@@ -23,7 +23,8 @@ def after_migrate():
         doc.update_notification_sender = sender
         
         if doc.update_notification_receivers:
-            doc.update_notification_receivers.clear()
+            for v in doc.update_notification_receivers:
+                doc.remove(v)
         
         for manager in managers:
             doc.append(
