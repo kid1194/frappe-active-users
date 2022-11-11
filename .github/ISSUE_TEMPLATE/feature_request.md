@@ -2,7 +2,7 @@
 name: Feature request
 about: Suggest an idea for this project
 title: "[REQ]"
-labels: documentation, duplicate, enhancement, question
+labels: enhancement
 assignees: kid1194
 
 ---
