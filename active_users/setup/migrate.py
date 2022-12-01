@@ -1,7 +1,7 @@
 # Active Users © 2022
 # Author:  Ameen Ahmed
 # Company: Level Up Marketing & Software Development Services
-# Licence: Please refer to license.txt
+# Licence: Please refer to LICENSE file
 
 
 import frappe
@@ -23,8 +23,7 @@ def after_migrate():
         doc.update_notification_sender = sender
         
         if doc.update_notification_receivers:
-            for v in doc.update_notification_receivers:
-                doc.remove(v)
+            doc.update_notification_receivers.clear()
         
         for manager in managers:
             doc.append(

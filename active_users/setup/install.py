@@ -1,7 +1,7 @@
 # Active Users © 2022
 # Author:  Ameen Ahmed
 # Company: Level Up Marketing & Software Development Services
-# Licence: Please refer to license.txt
+# Licence: Please refer to LICENSE file
 
 
 import frappe
@@ -28,8 +28,7 @@ def after_install():
         pluck="name"
     )):
         if doc.roles:
-            for r in doc.roles:
-                doc.remove(r)
+            doc.roles.clear()
         
         for r in roles:
             doc.append("roles", {"role": r})

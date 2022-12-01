@@ -2,7 +2,7 @@
 *  Frappe Active Users © 2022
 *  Author:  Ameen Ahmed
 *  Company: Level Up Marketing & Software Development Services
-*  Licence: Please refer to license.txt
+*  Licence: Please refer to LICENSE file
 */
 
 .active-users-list {
@@ -70,12 +70,6 @@ html[dir="rtl"] .active-users-footer-reload {
     justify-content: center;
     height: 260px;
 }
-.active-users-list-loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 260px;
-}
 .active-users-list-loading-box,
 .active-users-list-loading-box:before,
 .active-users-list-loading-box:after {
@@ -86,9 +80,9 @@ html[dir="rtl"] .active-users-footer-reload {
     animation: active-users-loader 1.8s infinite ease-in-out;
 }
 .active-users-list-loading-box {
-	position: relative;
-	color: #888;
-	font-size: 7px;
+    position: relative;
+    color: #888;
+    font-size: 7px;
     position: relative;
     text-indent: -9999em;
     transform: translateZ(0);
@@ -108,48 +102,48 @@ html[dir="rtl"] .active-users-footer-reload {
     left: 3.5em;
 }
 @keyframes active-users-loader {
-	0%, 80%, 100% { box-shadow: 0 2.5em 0 -1.3em }
-	40% { box-shadow: 0 2.5em 0 0 }
+    0%, 80%, 100% { box-shadow: 0 2.5em 0 -1.3em }
+    40% { box-shadow: 0 2.5em 0 0 }
 }
 @-o-keyframes active-users-loader {
     0%, 80%, 100% {
         -o-box-shadow: 0 2.5em 0 -1.3em;
         box-shadow: 0 2.5em 0 -1.3em;
     }
-	40% {
-	    -o-box-shadow: 0 2.5em 0 0;
-	    box-shadow: 0 2.5em 0 0;
-	}
+    40% {
+        -o-box-shadow: 0 2.5em 0 0;
+        box-shadow: 0 2.5em 0 0;
+    }
 }
 @-ms-keyframes active-users-loader {
     0%, 80%, 100% {
         -ms-box-shadow: 0 2.5em 0 -1.3em;
         box-shadow: 0 2.5em 0 -1.3em;
     }
-	40% {
-	    -ms-box-shadow: 0 2.5em 0 0;
-	    box-shadow: 0 2.5em 0 0;
-	}
+    40% {
+        -ms-box-shadow: 0 2.5em 0 0;
+        box-shadow: 0 2.5em 0 0;
+    }
 }
 @-webkit-keyframes active-users-loader {
     0%, 80%, 100% {
         -webkit-box-shadow: 0 2.5em 0 -1.3em;
         box-shadow: 0 2.5em 0 -1.3em;
     }
-	40% {
-	    -webkit-box-shadow: 0 2.5em 0 0;
-	    box-shadow: 0 2.5em 0 0;
-	}
+    40% {
+        -webkit-box-shadow: 0 2.5em 0 0;
+        box-shadow: 0 2.5em 0 0;
+    }
 }
 @-moz-keyframes active-users-loader {
     0%, 80%, 100% {
         -moz-box-shadow: 0 2.5em 0 -1.3em;
         box-shadow: 0 2.5em 0 -1.3em;
     }
-	40% {
-	    -moz-box-shadow: 0 2.5em 0 0;
-	    box-shadow: 0 2.5em 0 0;
-	}
+    40% {
+        -moz-box-shadow: 0 2.5em 0 0;
+        box-shadow: 0 2.5em 0 0;
+    }
 }
 .active-users-list-item {
     align-items: center;
@@ -168,10 +162,22 @@ html[dir="rtl"] .active-users-footer-reload {
 }
 .active-users-item-name {
     padding-left: 0;
+    padding-right: 15px;
     font-size: .8rem;
     text-align: left;
+    display: -moz-box;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-box-orient: vertical;
+    -o-line-clamp: 1;
+    -moz-box-orient: vertical;
+    -moz-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
 }
 html[dir="rtl"] .active-users-item-name {
+    padding-left: 15px;
     padding-right: 0;
     text-align: right;
 }

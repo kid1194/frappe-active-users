@@ -1,25 +1,23 @@
 # Active Users © 2022
 # Author:  Ameen Ahmed
 # Company: Level Up Marketing & Software Development Services
-# Licence: Please refer to license.txt
+# Licence: Please refer to LICENSE file
 
 
 from setuptools import setup, find_packages
-
-
-with open('requirements.txt') as f:
-    install_requires = f.read().strip().split('\n')
-
-
 from active_users import __version__ as version
 
 
+with open("requirements.txt") as f:
+    install_requires = f.read().strip().split("\n")
+
+
 setup(
-    name='active_users',
+    name="active_users",
     version=version,
-    description='Frappe plugin that displays a list of current active users.',
-    author='Ameen Ahmed (Level Up)',
-    author_email='kid1194@gmail.com',
+    description="Frappe plugin that displays a list of current active users.",
+    author="Ameen Ahmed (Level Up)",
+    author_email="kid1194@gmail.com",
     packages=find_packages(),
     zip_safe=False,
     include_package_data=True,

@@ -1,13 +1,12 @@
 # Active Users © 2022
 # Author:  Ameen Ahmed
 # Company: Level Up Marketing & Software Development Services
-# Licence: Please refer to license.txt
+# Licence: Please refer to LICENSE file
 
 
 import json
 
 import frappe
-from frappe import _
 
 
 _LOGGER = frappe.logger("active_users", file_count=50)

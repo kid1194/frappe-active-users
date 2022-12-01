@@ -1,7 +1,7 @@
 # Active Users © 2022
 # Author:  Ameen Ahmed
 # Company: Level Up Marketing & Software Development Services
-# Licence: Please refer to license.txt
+# Licence: Please refer to LICENSE file
 
 
 import json
@@ -88,8 +88,7 @@ def get_users():
         log_error(exc)
         return {"error": 1, "message": "Unable to parse the system session expiry value."}
     
-    end = now()
-    start = add_to_date(end, hours=tp[0], minutes=tp[1], seconds=tp[2], as_string=True, as_datetime=True)
+    start = add_to_date(now(), hours=tp[0], minutes=tp[1], seconds=tp[2], as_string=True, as_datetime=True)
     
     try:
         data = frappe.get_all(
@@ -98,7 +97,7 @@ def get_users():
             filters={
                 "enabled": 1,
                 "user_type": ["in", user_types],
-                "last_active": ["between", [start, end]],
+                "last_active": [">=", start],
             },
             order_by="full_name asc",
             limit_page_length=0,

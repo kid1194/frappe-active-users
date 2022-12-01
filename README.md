@@ -9,20 +9,15 @@ A small plugin for Frappe that displays a list of current active users.
 ---
 
 ### Table of Contents
-<ul>
-    <li><a href="#requirements">Requirements</a></li>
-    <li>
-        <a href="#setup">Setup</a>
-        <ul>
-            <li><a href="#install">Install</a></li>
-            <li><a href="#update">Update</a></li>
-            <li><a href="#uninstall">Uninstall</a></li>
-        </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#contributors">Contributors</a></li>
-    <li><a href="#license">License</a></li>
-</ul>
+- [Requirements](#requirements)
+- [Setup](#setup)
+  - [Install](#install)
+  - [Update](#update)
+  - [Uninstall](#uninstall)
+- [Usage](#usage)
+- [Contributors](#contributors)
+- [Issues](#issues)
+- [License](#license)
 
 ---
 
@@ -144,5 +139,10 @@ bench restart
 
 ---
 
+### Issues
+If you find bug in the plugin, please create a [bug report](https://github.com/kid1194/frappe-active-users/issues/new?assignees=kid1194&labels=bug&template=bug_report.md&title=%5BBUG%5D) and let us know about it.
+
+---
+
 ### License
-MIT
+This repository has been released under the [MIT License](https://github.com/kid1194/frappe-active-users/blob/main/LICENSE).

@@ -1,8 +1,13 @@
 {
  "actions": [],
+ "allow_copy": 1,
+ "allow_import": 1,
+ "editable_grid": 1,
  "autoname": "hash",
  "creation": "2022-04-04 04:04:04.119400",
+ "description": "Active users visible user type",
  "doctype": "DocType",
+ "document_type": "Document",
  "engine": "InnoDB",
  "field_order": [
   "user_type"
@@ -30,5 +35,6 @@
  "permissions": [],
  "sort_field": "modified",
  "sort_order": "DESC",
+ "states": [],
  "track_changes": 1
 }
