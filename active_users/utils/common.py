@@ -1,4 +1,4 @@
-# Active Users © 2022
+# Active Users © 2023
 # Author:  Ameen Ahmed
 # Company: Level Up Marketing & Software Development Services
 # Licence: Please refer to LICENSE file
@@ -13,7 +13,8 @@ _LOGGER = frappe.logger("active_users", file_count=50)
 
 
 _SETTINGS_ = "Active Users Settings"
-
+_CACHE_ = "Active Users"
+_CACHE_INTERVAL_ = 10
 
 def error(msg, throw=True):
     frappe.log_error("Active Users", msg)

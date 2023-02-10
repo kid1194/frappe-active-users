@@ -1,5 +1,5 @@
 /*
-*  Frappe Active Users © 2022
+*  Frappe Active Users © 2023
 *  Author:  Ameen Ahmed
 *  Company: Level Up Marketing & Software Development Services
 *  Licence: Please refer to LICENSE file
@@ -83,7 +83,6 @@ html[dir="rtl"] .active-users-footer-reload {
     position: relative;
     color: #888;
     font-size: 7px;
-    position: relative;
     text-indent: -9999em;
     transform: translateZ(0);
     animation-delay: -0.16s;

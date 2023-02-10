@@ -1,4 +1,4 @@
-# Active Users © 2022
+# Active Users © 2023
 # Author:  Ameen Ahmed
 # Company: Level Up Marketing & Software Development Services
 # Licence: Please refer to LICENSE file
@@ -27,10 +27,6 @@ app_include_js = ['active_users.bundle.js'] if is_frappe_above_v13 else ['/asset
 
 after_install = "active_users.setup.install.after_install"
 after_migrate = "active_users.setup.migrate.after_migrate"
-
-
-on_login = ["active_users.utils.access.on_login"]
-on_logout = ["active_users.utils.access.on_logout"]
 
 
 scheduler_events = {
