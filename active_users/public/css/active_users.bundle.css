@@ -18,17 +18,26 @@ html[dir="rtl"] .active-users-list {
 }
 .active-users-list-header,
 .active-users-list-footer {
-    background: #dddddd;
+    background: #ddd;
+}
+[data-theme="dark"] .active-users-list-header,
+[data-theme="dark"] .active-users-list-footer {
+    background: #222;
 }
 .active-users-list-header,
 .active-users-footer-text {
     font-weight: 300;
     line-height: 1.2;
+    color: #000;
 }
 .active-users-list-header {
     padding: 10px 25px;
     height: 40px;
     font-size: .9rem;
+}
+[data-theme="dark"] .active-users-list-header,
+[data-theme="dark"] .active-users-footer-text {
+    color: #fff;
 }
 html[dir="rtl"] .active-users-list-header,
 html[dir="rtl"] .active-users-footer-text {
@@ -60,6 +69,9 @@ html[dir="rtl"] .active-users-footer-reload {
     text-decoration: none;
     color: #000;
 }
+[data-theme="dark"] .active-users-footer-reload:hover {
+    color: #fff;
+}
 .active-users-list-body {
     max-height: 260px;
     overflow-y: auto;
@@ -86,6 +98,9 @@ html[dir="rtl"] .active-users-footer-reload {
     text-indent: -9999em;
     transform: translateZ(0);
     animation-delay: -0.16s;
+}
+[data-theme="dark"] .active-users-list-loading-box {
+    color: #fff;
 }
 .active-users-list-loading-box:before,
 .active-users-list-loading-box:after {
@@ -148,6 +163,9 @@ html[dir="rtl"] .active-users-footer-reload {
     align-items: center;
     padding: 5px 10px;
     border-bottom: 1px solid #f6f6f6;
+}
+[data-theme="dark"] .active-users-list-item {
+    border-bottom: 1px solid #262626;
 }
 .active-users-list-item:last-child {
     border-bottom: 0;
