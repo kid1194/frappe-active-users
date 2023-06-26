@@ -13,7 +13,8 @@ from active_users.utils.common import settings
 
 
 def after_migrate():
-    if (managers := get_system_managers(only_name=True)):
+    managers = get_system_managers(only_name=True)
+    if managers:
         if "Administrator" in managers:
             sender = "Administrator"
         else:

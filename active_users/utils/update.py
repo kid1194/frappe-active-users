@@ -8,14 +8,24 @@ import json
 import re
 
 import frappe
-from frappe.utils import cint, get_request_session, now, markdown
+from frappe.utils import (
+    cint,
+    get_request_session,
+    now,
+    markdown
+)
 
 from frappe.desk.doctype.notification_settings.notification_settings import (
     is_notifications_enabled
 )
 
 from active_users import __version__
-from .common import _SETTINGS_, log_error, settings, parse_json
+from .common import (
+    _SETTINGS_,
+    log_error,
+    settings,
+    parse_json
+)
 
 
 # Daily Schedule

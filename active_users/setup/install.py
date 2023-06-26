@@ -6,7 +6,11 @@
 
 import frappe
 
-from active_users.utils.common import _SETTINGS_, settings, clear_document_cache
+from active_users.utils.common import (
+    _SETTINGS_,
+    settings,
+    clear_document_cache
+)
 from .migrate import after_migrate
 
 
@@ -19,14 +23,15 @@ def after_install():
     if frappe.db.exists("User Type", "System User"):
         doc.append("user_types", {"user_type": "System User"})
     
-    if (roles := frappe.db.get_list(
+    roles = frappe.get_all(
         "Role",
         fields=["name"],
         filters={
             "name": ["in", ["Administrator", "System Manager"]],
         },
         pluck="name"
-    )):
+    )
+    if roles:
         if doc.roles:
             doc.roles.clear()
         
