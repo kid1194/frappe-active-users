@@ -4,17 +4,13 @@
 # Licence: Please refer to LICENSE file
 
 
-#import datetime
 import json
-#import math
 import re
 
 import frappe
 from frappe import _dict
-#from frappe import _dict, _
 from frappe.utils import (
     cint,
-    #cstr,
     has_common,
     now,
     add_to_date,
@@ -126,7 +122,6 @@ def get_users():
         data = frappe.get_all(
             "User",
             fields=["name", "full_name", "user_image"],
-            #fields=["name", "full_name", "user_image", "last_active"],
             filters={
                 "enabled": 1,
                 "user_type": ["in", user_types],
@@ -135,10 +130,6 @@ def get_users():
             order_by="full_name asc",
             limit_page_length=0,
         )
-        
-        #if data and isinstance(data, list):
-        #    for user in data:
-        #        user.last_active = abbr_time(user.last_active)
         
         if app.refresh_interval >= _CACHE_INTERVAL_:
             set_cache(_CACHE_, cache_key, _dict({
@@ -150,24 +141,3 @@ def get_users():
     except Exception as exc:
         log_error(exc)
         return {"error": 1, "message": "Unable to get the list of active users."}
-
-
-# def abbr_time(date: str):
-#     if not date:
-#         return ""
-#    
-#     try:
-#         date = datetime.datetime.strptime(date, DATETIME_FORMAT)
-#         now_dt = datetime.datetime.strptime(now(), DATETIME_FORMAT)
-#         dt_diff = now_dt - date
-#        
-#         dt_diff_seconds = (dt_diff.days * 86400.0) + dt_diff.seconds
-#        
-#         for i in range(0, 29):
-#             if dt_diff_seconds < (60.0 * (i + 1)):
-#                 return _("{0}m").format(cstr(i))
-#        
-#         return ""
-#    
-#     except Exception as exc:
-#         return ""
