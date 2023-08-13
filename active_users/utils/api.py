@@ -124,6 +124,7 @@ def get_users():
             fields=["name", "full_name", "user_image"],
             filters={
                 "enabled": 1,
+                "name": ["!=", frappe.session.user],
                 "user_type": ["in", user_types],
                 "last_active": [">=", start],
             },

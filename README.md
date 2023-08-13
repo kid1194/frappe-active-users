@@ -2,9 +2,9 @@
 
 A small plugin for Frappe that displays a list of current active users.
 
-<div style="width:100%;text-align:center">
-    <img src="https://github.com/kid1194/frappe-active-users/blob/main/images/image.png?raw=true" alt="Active ausers"/>
-</div>
+<p align="center">
+    <img src="https://github.com/kid1194/frappe-active-users/blob/main/images/image.png?raw=true" alt="Active Users"/>
+</p>
 
 ---
 
