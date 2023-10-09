@@ -16,6 +16,7 @@ _SETTINGS_ = "Active Users Settings"
 _CACHE_ = "Active Users"
 _CACHE_INTERVAL_ = 10
 
+
 def error(msg, throw=True):
     frappe.log_error("Active Users", msg)
     if throw:

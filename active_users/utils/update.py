@@ -8,6 +8,7 @@ import json
 import re
 
 import frappe
+from frappe import _
 from frappe.utils import (
     cint,
     get_request_session,
@@ -127,8 +128,12 @@ def send_notification(version, sender, receivers, message):
                     "document_name": _SETTINGS_,
                     "from_user": sender,
                     "for_user": receiver,
-                    "subject": "Active Users: A New Version Is Available",
+                    "subject": "{0}: {1}".format(
+                        _("Active Users"), _("A New Version Is Available")
+                    ),
                     "type": "Alert",
-                    "email_content": f"<p><h2>Version {version}</h2></p>{message}",
+                    "email_content": "<p><h2>{0} {1}</h2></p>{2}".format(
+                        _("Version"), version, message
+                    ),
                 })
                 .insert(ignore_permissions=True, ignore_mandatory=True))

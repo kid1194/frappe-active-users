@@ -20,7 +20,16 @@ def after_install():
     
     doc = settings(True)
     
-    if frappe.db.exists("User Type", "System User"):
+    user_types = None
+    if doc.user_types:
+        user_types = [v.user_type for v in doc.user_types]
+    
+    if (
+        (
+            not user_types or
+            "System User" not in user_types
+        ) and frappe.db.exists("User Type", "System User")
+    ):
         doc.append("user_types", {"user_type": "System User"})
     
     roles = frappe.get_all(
@@ -32,11 +41,14 @@ def after_install():
         pluck="name"
     )
     if roles:
+        
+        user_roles = None
         if doc.roles:
-            doc.roles.clear()
+            user_roles = [v.role for v in doc.roles]
         
         for r in roles:
-            doc.append("roles", {"role": r})
+            if not user_roles or r not in user_roles:
+                doc.append("roles", {"role": r})
     
     doc.save(ignore_permissions=True)
         

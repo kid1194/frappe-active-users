@@ -4,11 +4,8 @@
 # Licence: Please refer to LICENSE file
 
 
-import json
-import re
-
 import frappe
-from frappe import _dict
+from frappe import _, _dict
 from frappe.utils import (
     cint,
     has_common,
@@ -81,14 +78,13 @@ def get_users():
         cache = get_cache(_CACHE_, cache_key)
         
         if cache and isinstance(cache, dict):
-            if get_datetime(cache.expiry) < now_datetime():
-                del_cache(_CACHE_, cache_key)
-            else:
+            if get_datetime(cache.expiry) >= now_datetime():
                 return {"users": cache.data}
+            
+            del_cache(_CACHE_, cache_key)
     
     
     tp = [0, -20, 0]
-    
     sess_expiry = frappe.get_system_settings("session_expiry")
     if not sess_expiry or not isinstance(sess_expiry, str):
         sess_expiry = frappe.get_system_settings("session_expiry_mobile")
@@ -108,11 +104,13 @@ def get_users():
                         if tpv:
                             tp[idx] = -abs(tpv)
                     idx += 1
+            
             else:
-                return {"error": 1, "message": "The system session expiry value is invalid."}
+                return {"error": 1, "message": _("The system session expiry value is invalid.")}
+    
     except Exception as exc:
         log_error(exc)
-        return {"error": 1, "message": "Unable to parse the system session expiry value."}
+        return {"error": 1, "message": _("Unable to parse the system session expiry value.")}
     
     now_dt = now()
     start = add_to_date(now_dt, hours=tp[0], minutes=tp[1], seconds=tp[2], as_string=True, as_datetime=True)
@@ -135,10 +133,14 @@ def get_users():
         if app.refresh_interval >= _CACHE_INTERVAL_:
             set_cache(_CACHE_, cache_key, _dict({
                 "data": data,
-                "expiry": add_to_date(now_dt, minutes=_CACHE_INTERVAL_, as_string=True, as_datetime=True)
+                "expiry": add_to_date(
+                    now_dt, minutes=_CACHE_INTERVAL_,
+                    as_string=True, as_datetime=True
+                )
             }))
         
         return {"users": data}
+    
     except Exception as exc:
         log_error(exc)
-        return {"error": 1, "message": "Unable to get the list of active users."}
+        return {"error": 1, "message": _("Unable to get the list of active users.")}

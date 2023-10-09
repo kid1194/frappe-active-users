@@ -4,7 +4,6 @@
 # Licence: Please refer to LICENSE file
 
 
-from . import __version__ as app_version
 from frappe import __version__ as frappe_version
 
 

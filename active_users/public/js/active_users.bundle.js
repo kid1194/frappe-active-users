@@ -146,10 +146,10 @@ class ActiveUsers {
         `);
         $('header.navbar > .container > .navbar-collapse > ul.navbar-nav').prepend(this.$app.get(0));
         
-        this.$body = this.$app.find('.active-users-list-body');
-        this.$loading = this.$body.find('.active-users-list-loading').hide();
-        this.$footer = this.$app.find('.active-users-footer-text');
-        this.$reload = this.$app.find('.active-users-footer-reload');
+        this.$body = this.$app.find('.active-users-list-body').first();
+        this.$loading = this.$body.find('.active-users-list-loading').first().hide();
+        this.$footer = this.$app.find('.active-users-footer-text').first();
+        this.$reload = this.$app.find('.active-users-footer-reload').first();
         
         this.setup_manual_sync();
     }
@@ -159,10 +159,10 @@ class ActiveUsers {
             return;
         }
         var me = this;
-        this.$reload.on('click', function(e) {
+        this.$reload.show().click(function(e) {
             e.preventDefault();
             if (!me._syncing) me.sync_reload();
-        }).show();
+        });
     }
     sync_reload() {
         if (!this.is_online) return;
