@@ -4,7 +4,7 @@
 # Licence: Please refer to LICENSE file
 
 
-from frappe import __version__ as frappe_version
+from .version import __frappe_version_min_14__
 
 
 app_name = "active_users"
@@ -17,17 +17,14 @@ app_email = "kid1194@gmail.com"
 app_license = "MIT"
 
 
-is_frappe_above_v13 = int(frappe_version.split(".")[0]) > 13
-
-
 app_include_css = [
     "active_users.bundle.css"
-] if is_frappe_above_v13 else [
+] if __frappe_version_min_14__ else [
     "/assets/active_users/css/active_users.css"
 ]
 app_include_js = [
     "active_users.bundle.js"
-] if is_frappe_above_v13 else [
+] if __frappe_version_min_14__ else [
     "/assets/active_users/js/active_users.js"
 ]
 

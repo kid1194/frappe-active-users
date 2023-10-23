@@ -21,6 +21,7 @@ from frappe.desk.doctype.notification_settings.notification_settings import (
 )
 
 from active_users import __version__
+from active_users.version import __frappe_version_min_15__
 from .common import (
     _SETTINGS_,
     log_error,
@@ -107,15 +108,26 @@ def compare_versions(verA, verB):
 
 ## Self
 def enqueue_send_notification(version, sender, receivers, message):
-    frappe.enqueue(
-        "active_users.utils.update.send_notification",
-        job_name=f"active_users-send-notification-{version}",
-        is_async=True,
-        version=version,
-        sender=sender,
-        receivers=receivers,
-        message=message
-    )
+    if __frappe_version_min_15__:
+        frappe.enqueue(
+            "active_users.utils.update.send_notification",
+            job_id=f"active_users-send-notification-{version}",
+            is_async=True,
+            version=version,
+            sender=sender,
+            receivers=receivers,
+            message=message
+        )
+    else:
+        frappe.enqueue(
+            "active_users.utils.update.send_notification",
+            job_name=f"active_users-send-notification-{version}",
+            is_async=True,
+            version=version,
+            sender=sender,
+            receivers=receivers,
+            message=message
+        )
 
 
 ## Self
